@@ -12,43 +12,43 @@ import java.util.List;
 public class Input implements AlgorithmInput {
 
   /** Rectangle item. */
-	public static class Rectangle {
-		public int width;
-		public int height;
-	}
+  public static class Rectangle {
+    public int width;
+    public int height;
+  }
 
-	/** List of rectangle items. */
-	private final List<Rectangle> rectangles;
+  /** List of rectangle items. */
+  private final List<Rectangle> rectangles;
 
-	/** Width of strip. */
-	private final int stripWidth;
+  /** Width of strip. */
+  private final int stripWidth;
 
-	/**
-	 * Constructs input for 2 Dimensional Strip Packing Problem.
-	 *
-	 * @param rectangles rectangle items to be packed
-	 * @param stripWidth width of strip
-	 */
-	public Input(List<Rectangle> rectangles, int stripWidth) {
-	  this.rectangles = rectangles;
-	  this.stripWidth = stripWidth;
-	}
+  /**
+   * Constructs input for 2 Dimensional Strip Packing Problem.
+   *
+   * @param rectangles rectangle items to be packed
+   * @param stripWidth width of strip
+   */
+  public Input(List<Rectangle> rectangles, int stripWidth) {
+    this.rectangles = rectangles;
+    this.stripWidth = stripWidth;
+  }
 
-	/**
-	 * Returns all rectangle items to be packed. Order of items matters.
-	 *
-	 * @return rectangle items to be packed
-	 */
-	public List<Rectangle> getRectangles() {
-	  return rectangles;
-	}
+  /**
+   * Returns all rectangle items to be packed. Order of items matters.
+   *
+   * @return rectangle items to be packed
+   */
+  public List<Rectangle> getRectangles() {
+    return rectangles;
+  }
 
-	/**
-	 * Returns width of strip into which rectangle items to be packed.
-	 *
-	 * @return width of strip
-	 */
-	public int getStripWidth() {
-	  return stripWidth;
-	}
+  /**
+   * Returns width of strip into which rectangle items to be packed.
+   *
+   * @return width of strip
+   */
+  public int getStripWidth() {
+    return stripWidth;
+  }
 }
