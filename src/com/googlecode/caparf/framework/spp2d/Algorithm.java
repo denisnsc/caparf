@@ -9,5 +9,5 @@ package com.googlecode.caparf.framework.spp2d;
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
 public interface Algorithm<I extends Input, O extends Output> extends
-	com.googlecode.caparf.framework.Algorithm<I, O> {
+    com.googlecode.caparf.framework.Algorithm<I, O> {
 }
