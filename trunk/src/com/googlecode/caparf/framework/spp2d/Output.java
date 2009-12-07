@@ -6,7 +6,7 @@ import com.googlecode.caparf.framework.AlgorithmOutput;
 
 /**
  * Output for 2 Dimensional Strip Packing Problem.
- *
+ * 
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
 public class Output implements AlgorithmOutput {
@@ -18,31 +18,36 @@ public class Output implements AlgorithmOutput {
   }
 
   /** Rectangle items' placement. */
-  private List<Point2D> placement;
+  private final List<Point2D> placement;
 
   /**
-   * Constructs output for 2 Dimensional Strip Packing Problem.
-   */
-  public Output() {
-    this.placement = null;
-  }
-
-  /**
-   * Sets rectangle items' placement. Placement is the ordered list of
-   * bottom-left points of corresponding rectangle items.
-   *
+   * Constructs output for 2 Dimensional Strip Packing Problem. Placement is the
+   * ordered list of bottom-left points of corresponding rectangle items.
+   * 
    * @param placement rectangle items' placement
    */
-  public void setPlacement(List<Point2D> placement) {
+  public Output(List<Point2D> placement) {
     this.placement = placement;
   }
 
   /**
    * Sets rectangle items' placement.
-   *
+   * 
    * @param placement
    */
   public List<Point2D> getPlacement() {
     return placement;
+  }
+  
+  @Override
+  public String toString() {
+    String ret = "";
+    for (Point2D point : placement) {
+      if (ret.length() > 0) {
+        ret += ", ";
+      }
+      ret += "(" + point.x + ", " + point.y + ")";
+    }
+    return ret;
   }
 }
