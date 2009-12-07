@@ -14,12 +14,9 @@ import com.googlecode.caparf.framework.spp2d.Output;
 /**
  * NextFit algorithm with {@code O(n log n)} time complexity.
  *
- * @param <I> algorithm input
- * @param <O> algorithm output
- *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class NextFit<I extends Input, O extends Output> implements Algorithm<I, O> {
+public class NextFit implements Algorithm {
   /**
    * Segment of horizontal slice in a packing. Each segment is either fully
    * occupied by some rectangle or free. Segment is represented by two
@@ -72,11 +69,11 @@ public class NextFit<I extends Input, O extends Output> implements Algorithm<I, 
   /** Positions of rectangles */
   List<Output.Point2D> placement;
 
-  /** Total number of all and placed rectangles correspondingly. */
-  int totalRects, placedRects;
+  /** Total number of placed rectangles correspondingly. */
+  int placedRects;
 
   @Override
-  public void solve(I input, O output) {
+  public Output solve(Input input) {
     rects = input.getRectangles();
     placedRects = 0;
 
@@ -88,10 +85,10 @@ public class NextFit<I extends Input, O extends Output> implements Algorithm<I, 
     queue = new LinkedList<Segment>();
     queue.addFirst(new Segment(0, input.getStripWidth(), 0, Segment.ID_NO_RECT));
 
-    heap = new PriorityQueue<Segment>(totalRects, new Comparator<Segment>() {
+    heap = new PriorityQueue<Segment>(rects.size(), new Comparator<Segment>() {
       @Override
       public int compare(Segment o1, Segment o2) {
-        return o1.y - o2.y;
+        return (o1.y != o2.y) ? (o1.y - o2.y) : (o1.xl - o2.xl);
       }
     });
 
@@ -124,6 +121,11 @@ public class NextFit<I extends Input, O extends Output> implements Algorithm<I, 
           placement.get(placedRects).y = y0;
           heap.add(rectSegment);
           placedRects += 1;
+
+          // Check whether it is the last rectangle
+          if (placedRects == rects.size()) {
+            break;
+          }
         }
       } else {
         // Change current y-coordinate to the least y-coordinate of segments in
@@ -131,7 +133,7 @@ public class NextFit<I extends Input, O extends Output> implements Algorithm<I, 
         y0 = heap.peek().y;
         // and remove all segments with y-coordinate equal to new current
         // y-coordinate from heap
-        while (heap.peek().y == y0) {
+        while (!heap.isEmpty() && heap.peek().y == y0) {
           Segment segment = heap.poll();
           segment.rectId = Segment.ID_NO_RECT;
           // Merge with previous segment
@@ -155,10 +157,12 @@ public class NextFit<I extends Input, O extends Output> implements Algorithm<I, 
               segment.next.prev = segment;
             }
           }
+          // Add segment to queue
+          queue.add(segment);
         }
       }
     }
 
-    output.setPlacement(placement);
+    return new Output(placement);
   }
 }
