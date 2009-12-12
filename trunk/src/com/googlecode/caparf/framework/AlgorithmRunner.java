@@ -1,21 +1,22 @@
 package com.googlecode.caparf.framework;
 
+import com.googlecode.caparf.framework.AlgorithmOutputVerdict.Verdict;
+
 public class AlgorithmRunner {
 
-  public static <I extends AlgorithmInput, O extends AlgorithmOutput> void run(
-      AlgorithmInputReader<I> inputReader, Algorithm<I, O> algorithm,
-      AlgorithmOutputVerifier<I, O> verifier) {
+  public static <I extends AlgorithmInput, O extends AlgorithmOutput,
+      V extends AlgorithmOutputVerdict> void run(
+          AlgorithmInputReader<I> inputReader, Algorithm<I, O> algorithm,
+          AlgorithmOutputVerifier<I, O, V> verifier) {
     int totalInputs = 0, totalOks = 0;
     for (I input : inputReader.readAllInputs()) {
       totalInputs++;
       O output = algorithm.solve(input);
-      if (verifier.verify(input, output)) {
+      V verdict = verifier.verify(input, output); 
+      if (verdict.getVerdict() == Verdict.CORRECT_ANSWER) {
         totalOks++;
-      } else {
-        System.out.println("Input: " + input);        
-        System.out.println("Resulting output: " + output);        
-        System.out.println("Output is incorrect");
       }
+      System.out.println(input + "\n  " + verdict);
     }
     
     if (totalInputs == totalOks) {
