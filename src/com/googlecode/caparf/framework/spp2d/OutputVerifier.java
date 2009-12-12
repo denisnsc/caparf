@@ -1,6 +1,7 @@
 package com.googlecode.caparf.framework.spp2d;
 
 import com.googlecode.caparf.framework.AlgorithmOutputVerifier;
+import com.googlecode.caparf.framework.AlgorithmOutputVerdict.Verdict;
 import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
 import com.googlecode.caparf.framework.spp2d.Output.Point2D;
 
@@ -11,14 +12,17 @@ import com.googlecode.caparf.framework.spp2d.Output.Point2D;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output> {
+public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output, OutputVerdict> {
 
   @Override
-  public boolean verify(Input input, Output output) {
+  public OutputVerdict verify(Input input, Output output) {
+    OutputVerdict verdict = new OutputVerdict();
+
     // Verifies that input and output has the same number of rectangle items
     if (input.getRectangles().size() != output.getPlacement().size()) {
-      System.out.println("Input and output has different number of rectangle items");
-      return false;
+      verdict.setVerdict(Verdict.WRONG_ANSWER);
+      verdict.setComment("Input and output has different number of rectangle items");
+      return verdict;
     }
 
     // Verifies that each rectangle item fits into the strip
@@ -26,17 +30,20 @@ public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output> {
       Rectangle rect = input.getRectangles().get(i);
       Point2D position = output.getPlacement().get(i);
       if (position.x < 0 || position.x + rect.width > input.getStripWidth() || position.y < 0) {
-        System.out.println("Rectangle item #" + i + " does not fit into the strip");
-        return false;
+        verdict.setVerdict(Verdict.WRONG_ANSWER);
+        verdict.setComment("Rectangle item #" + i + " does not fit into the strip");
+        return verdict;
       }
     }
 
     // Verifies that rectangle items do not intersect
+    int stripHeight = 0;
     for (int i = 0; i < input.getRectangles().size(); i++) {
       int xli = output.getPlacement().get(i).x;
       int xri = xli + input.getRectangles().get(i).width;
       int yli = output.getPlacement().get(i).y;
       int yri = yli + input.getRectangles().get(i).height;
+      stripHeight = Math.max(stripHeight, yri);
       for (int j = i + 1; j < input.getRectangles().size(); j++) {
         int xlj = output.getPlacement().get(j).x;
         int xrj = xlj + input.getRectangles().get(j).width;
@@ -49,12 +56,17 @@ public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output> {
         int yr = Math.max(Math.min(yri, yrj), yl);
 
         if ((xr - xl) * (yr - yl) > 0) {
-          System.out.println("Rectangle items #" + i + " and #" + j + " intersects");
-          return false;
+          verdict.setVerdict(Verdict.WRONG_ANSWER);
+          verdict.setComment("Rectangle items #" + i + " and #" + j + " intersects");
+          return verdict;
         }
       }
     }
 
-    return true;
+    // Output is correct
+    verdict.setVerdict(Verdict.CORRECT_ANSWER);
+    verdict.setStripHeight(stripHeight);
+
+    return verdict;
   }
 }
