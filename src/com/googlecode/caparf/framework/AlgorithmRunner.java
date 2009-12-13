@@ -15,15 +15,16 @@ public class AlgorithmRunner {
       V verdict = verifier.verify(input, output); 
       if (verdict.getVerdict() == Verdict.CORRECT_ANSWER) {
         totalOks++;
+      } else {
+        System.out.println(input + "\n  Verdict: " + verdict + "\n  Output: " + output);
       }
-      System.out.println(input + "\n  " + verdict);
     }
     
     if (totalInputs == totalOks) {
-      System.out.println("OK: all " + totalInputs + " inputs were solved");
+      System.out.println("OK: all " + totalInputs + " inputs were solved by " + algorithm);
     } else {
       System.out.println("ERROR: " + (totalInputs - totalOks) + " inputs of total " +
-          totalInputs + " inputs were not solved");
+          totalInputs + " inputs were not solved by " + algorithm);
     }
   }
 }
