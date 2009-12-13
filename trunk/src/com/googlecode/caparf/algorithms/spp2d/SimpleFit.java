@@ -6,14 +6,15 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+
 import com.googlecode.caparf.framework.spp2d.Algorithm;
 import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
 
 /**
- * SimpleFit can work produce the same results as well-known NextFit and
- * FirstFit algorithms. Algorithm time and memory complexity is {@code O(n log
- * n)}. SimpleFit places rectangle items in bottom-left positions, never looking
+ * SimpleFit can produce the same results as well-known NextFit and FirstFit
+ * algorithms. Algorithm time and memory complexity is {@code O(n log n)}.
+ * SimpleFit places rectangle items in bottom-left positions, never looking
  * back. It means that it can produce big gaps in resulting packing. Rectangle
  * items can be selected in 2 ways:
  * <ul>
@@ -22,9 +23,9 @@ import com.googlecode.caparf.framework.spp2d.Output;
  * <li>The first item in rectangle items list given to the algorithm that fits
  * the current segment will be selected in case of {@link ItemOrder#FIRST_FIT}.
  * </ul>
- * Items are placed according to bottom-left rule. One can try greedy
- * modification of this rule that place the rightmost rectangle items in
- * rightmost segment to the right by using
+ * Items are placed according to the bottom-left rule. One can try greedy
+ * modification of this rule that places the rightmost rectangle items in
+ * rightmost segments to the right by using
  * {@link PlacementStrategy#SHIFT_RIGHTMOST_ITEM}.
  * <p>
  * Note, that this class is not thread-safe.
@@ -221,7 +222,7 @@ public class SimpleFit implements Algorithm {
     }
     return ret;
   }
-  
+
   @Override
   public String toString() {
     return "SimpleFit(" + itemOrder + ", " + placementStrategy + ")@" +
@@ -234,7 +235,9 @@ public class SimpleFit implements Algorithm {
    * x-coordinates of leftmost and rightmost points which remains the same for
    * the whole segment's "life". Previous and next segments can change depending
    * on current y-coordinate. Each segment has maximal y-coordinate. If current
-   * y-coordinate is greater than it then the segment makes no sense.
+   * y-coordinate is greater than it then the segment makes no sense. If
+   * {@link #rectId} is equal to {@link #ID_INVALID} the the segment also makes
+   * no sense.
    */
   protected static class Segment {
     /** Id corresponding to invalid segment. */
@@ -270,7 +273,7 @@ public class SimpleFit implements Algorithm {
     }
 
     /**
-     * Merges this segment with the previous segment, {@code this.prev} must be
+     * Merges this segment with the previous segment, {@link #prev} must be
      * non-null.
      */
     public void mergeWithPrevious() {
@@ -284,7 +287,7 @@ public class SimpleFit implements Algorithm {
     }
 
     /**
-     * Merges this segment with the next segment, {@code this.next} must be
+     * Merges this segment with the next segment, {@link #next} must be
      * non-null.
      */
     public void mergeWithNext() {
@@ -298,7 +301,7 @@ public class SimpleFit implements Algorithm {
     }
 
     /**
-     * Swaps this segment with the previous segment {@code this.prev} must be
+     * Swaps this segment with the previous segment {@link #prev} must be
      * non-null.
      */
     public void swapWithPrevious() {
@@ -327,7 +330,7 @@ public class SimpleFit implements Algorithm {
   }
 
   /**
-   * Binary items tree that allows to search for feasible rectangle items in
+   * Items Binary tree that allows to search for feasible rectangle items in
    * {@code O(n log n)} time complexity. Leafs of the tree corresponds to
    * rectangle items, non-leaf nodes store minimal rectangle items width in
    * the corresponding sub-tree. Hence, the root of the tree is the minimal
@@ -337,7 +340,7 @@ public class SimpleFit implements Algorithm {
     private int[] tree;
     private int leafCnt;
 
-    /** Constructs binary items tree. */
+    /** Constructs items binary tree. */
     public ItemsTree() {
       leafCnt = 1;
       while (leafCnt < rects.size()) leafCnt <<= 1;
