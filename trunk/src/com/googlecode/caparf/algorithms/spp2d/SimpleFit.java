@@ -236,7 +236,7 @@ public class SimpleFit implements Algorithm {
    * the whole segment's "life". Previous and next segments can change depending
    * on current y-coordinate. Each segment has maximal y-coordinate. If current
    * y-coordinate is greater than it then the segment makes no sense. If
-   * {@link #rectId} is equal to {@link #ID_INVALID} the the segment also makes
+   * {@link #rectId} is equal to {@link #ID_INVALID} then the segment also makes
    * no sense.
    */
   protected static class Segment {
@@ -330,7 +330,7 @@ public class SimpleFit implements Algorithm {
   }
 
   /**
-   * Items Binary tree that allows to search for feasible rectangle items in
+   * Items binary tree that allows to search for feasible rectangle items in
    * {@code O(n log n)} time complexity. Leafs of the tree corresponds to
    * rectangle items, non-leaf nodes store minimal rectangle items width in
    * the corresponding sub-tree. Hence, the root of the tree is the minimal
