@@ -1,7 +1,6 @@
 package com.googlecode.caparf.framework.spp2d;
 
-import com.googlecode.caparf.framework.AlgorithmOutputVerifier;
-import com.googlecode.caparf.framework.AlgorithmOutputVerdict.Verdict;
+import com.googlecode.caparf.framework.base.BaseOutputVerdict.Verdict;
 import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
 import com.googlecode.caparf.framework.spp2d.Output.Point2D;
 
@@ -12,7 +11,8 @@ import com.googlecode.caparf.framework.spp2d.Output.Point2D;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output, OutputVerdict> {
+public class OutputVerifier implements
+    com.googlecode.caparf.framework.base.BaseOutputVerifier<Input, Output, OutputVerdict> {
 
   @Override
   public OutputVerdict verify(Input input, Output output) {
@@ -20,7 +20,7 @@ public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output, Ou
 
     // Verifies that input and output has the same number of rectangle items
     if (input.getRectangles().size() != output.getPlacement().size()) {
-      verdict.setVerdict(Verdict.WRONG_ANSWER);
+      verdict.setVerdict(Verdict.INVALID_OUTPUT);
       verdict.setComment("Input and output has different number of rectangle items");
       return verdict;
     }
@@ -30,7 +30,7 @@ public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output, Ou
       Rectangle rect = input.getRectangles().get(i);
       Point2D position = output.getPlacement().get(i);
       if (position.x < 0 || position.x + rect.width > input.getStripWidth() || position.y < 0) {
-        verdict.setVerdict(Verdict.WRONG_ANSWER);
+        verdict.setVerdict(Verdict.INVALID_OUTPUT);
         verdict.setComment("Rectangle item #" + i + " does not fit into the strip");
         return verdict;
       }
@@ -56,7 +56,7 @@ public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output, Ou
         int yr = Math.max(Math.min(yri, yrj), yl);
 
         if ((xr - xl) * (yr - yl) > 0) {
-          verdict.setVerdict(Verdict.WRONG_ANSWER);
+          verdict.setVerdict(Verdict.INVALID_OUTPUT);
           verdict.setComment("Rectangle items #" + i + " and #" + j + " intersects");
           return verdict;
         }
@@ -64,7 +64,7 @@ public class OutputVerifier implements AlgorithmOutputVerifier<Input, Output, Ou
     }
 
     // Output is correct
-    verdict.setVerdict(Verdict.CORRECT_ANSWER);
+    verdict.setVerdict(Verdict.VALID_OUTPUT);
     verdict.setStripHeight(stripHeight);
 
     return verdict;
