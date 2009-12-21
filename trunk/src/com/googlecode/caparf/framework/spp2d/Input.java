@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.googlecode.caparf.framework.base.BaseInput;
+
 /**
  * Input for 2 Dimensional Strip Packing Problem.
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class Input extends com.googlecode.caparf.framework.base.BaseInput {
+public class Input extends BaseInput {
 
   /** Rectangle item. */
   public static class Rectangle {
