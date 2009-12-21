@@ -41,7 +41,7 @@ public class InputSuite<I extends BaseInput> {
   }
 
   /**
-   * Adds all algorithms input in the given suite to this suite
+   * Adds all algorithm inputs in the given suite to this suite
    *
    * @param inputs input suite to add
    * @return this
@@ -52,7 +52,7 @@ public class InputSuite<I extends BaseInput> {
   }
 
   /**
-   * Adds all algorithms input in the given collection to the suite.
+   * Adds all algorithm inputs in the given collection to the suite.
    *
    * @param inputs inputs to add
    * @return this
@@ -63,7 +63,7 @@ public class InputSuite<I extends BaseInput> {
   }
 
   /**
-   * Add all given algorithm inputs to the suite.
+   * Adds all given algorithm inputs to the suite.
    *
    * @param inputs inputs to add
    * @return this

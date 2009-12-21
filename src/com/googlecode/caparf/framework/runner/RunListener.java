@@ -9,7 +9,7 @@ import com.googlecode.caparf.framework.base.BaseOutputVerdict;
  * If you need to respond to the events during a scenario run, extend {@code
  * RunListener} and override the appropriate methods. If a listener throws an
  * exception while processing a test event, it will be removed for the remainder
- * of the test run.
+ * of the scenario run.
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */

@@ -39,7 +39,7 @@ public class CaparfCore<I extends BaseInput, O extends BaseOutput,
   }
 
   /**
-   * Add a listener to be notified as the scenario run.
+   * Adds a listener to be notified as the scenario run.
    * 
    * @param listener the listener to add
    */
@@ -48,7 +48,7 @@ public class CaparfCore<I extends BaseInput, O extends BaseOutput,
   }
 
   /**
-   * Remove a listener.
+   * Removes a listener.
    * 
    * @param listener the listener to remove
    */

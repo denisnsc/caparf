@@ -5,7 +5,7 @@ package com.googlecode.caparf.framework.base;
  *
  * @param <I> algorithm input
  * @param <O> algorithm output
- * @param <V> output verdict
+ * @param <V> output verification verdict
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */

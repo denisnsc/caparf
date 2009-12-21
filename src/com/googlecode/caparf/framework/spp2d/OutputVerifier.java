@@ -1,5 +1,6 @@
 package com.googlecode.caparf.framework.spp2d;
 
+import com.googlecode.caparf.framework.base.BaseOutputVerifier;
 import com.googlecode.caparf.framework.base.BaseOutputVerdict.Verdict;
 import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
 import com.googlecode.caparf.framework.spp2d.Output.Point2D;
@@ -11,8 +12,7 @@ import com.googlecode.caparf.framework.spp2d.Output.Point2D;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class OutputVerifier implements
-    com.googlecode.caparf.framework.base.BaseOutputVerifier<Input, Output, OutputVerdict> {
+public class OutputVerifier implements BaseOutputVerifier<Input, Output, OutputVerdict> {
 
   @Override
   public OutputVerdict verify(Input input, Output output) {
