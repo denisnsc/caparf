@@ -1,13 +1,11 @@
 package com.googlecode.caparf.framework.spp2d;
 
-import com.googlecode.caparf.framework.AlgorithmOutputVerdict;
-
 /**
  * Output verdict for 2 Dimensional Strip Packing Problem.
  * 
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class OutputVerdict extends AlgorithmOutputVerdict {
+public class OutputVerdict extends com.googlecode.caparf.framework.base.BaseOutputVerdict {
   private int stripHeight;
 
   public int getStripHeight() {
@@ -21,7 +19,7 @@ public class OutputVerdict extends AlgorithmOutputVerdict {
   @Override
   public String toString() {
     String comment = "";
-    if (getVerdict() == Verdict.CORRECT_ANSWER) {
+    if (getVerdict() == Verdict.VALID_OUTPUT) {
       comment = "strip height = " + stripHeight;
     } else {
       comment = getComment();

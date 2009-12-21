@@ -2,14 +2,12 @@ package com.googlecode.caparf.framework.spp2d;
 
 import java.util.List;
 
-import com.googlecode.caparf.framework.AlgorithmOutput;
-
 /**
  * Output for 2 Dimensional Strip Packing Problem.
  * 
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class Output implements AlgorithmOutput {
+public class Output implements com.googlecode.caparf.framework.base.BaseOutput {
 
   /** Point in 2 Dimensional space. */
   public static class Point2D {

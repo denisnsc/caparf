@@ -1,7 +1,5 @@
 package com.googlecode.caparf.framework.spp2d;
 
-import com.googlecode.caparf.framework.AlgorithmInput;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class Input implements AlgorithmInput {
+public class Input extends com.googlecode.caparf.framework.base.BaseInput {
 
   /** Rectangle item. */
   public static class Rectangle {
@@ -30,16 +28,15 @@ public class Input implements AlgorithmInput {
   /** Width of strip. */
   private final int stripWidth;
 
-  /** Brief description of input. */
-  private String description;
-
   /**
    * Constructs input for 2 Dimensional Strip Packing Problem.
    *
    * @param rectangles rectangle items to be packed
    * @param stripWidth width of strip
+   * @param identifier input identifier
    */
-  public Input(List<Rectangle> rectangles, int stripWidth) {
+  public Input(List<Rectangle> rectangles, int stripWidth, String identifier) {
+    super(identifier);
     this.rectangles = rectangles;
     this.stripWidth = stripWidth;
   }
@@ -49,8 +46,10 @@ public class Input implements AlgorithmInput {
    *
    * @param rectangles rectangle items to be packed
    * @param stripWidth width of strip
+   * @param identifier input identifier
    */
-  public Input(Rectangle[] rectangles, int stripWidth) {
+  public Input(Rectangle[] rectangles, int stripWidth, String identifier) {
+    super(identifier);
     this.rectangles = new ArrayList<Rectangle>(rectangles.length);
     Collections.addAll(this.rectangles, rectangles);
     this.stripWidth = stripWidth;
@@ -62,8 +61,10 @@ public class Input implements AlgorithmInput {
    * @param widths     widths of rectangle items to be packed
    * @param heights    heights of rectangle items to be packed
    * @param stripWidth width of strip
+   * @param identifier input identifier
    */
-  public Input(int[] widths, int[] heights, int stripWidth) {
+  public Input(int[] widths, int[] heights, int stripWidth, String identifier) {
+    super(identifier);
     rectangles = new ArrayList<Rectangle>(widths.length);
     for (int i = 0; i < widths.length; i++) {
       rectangles.add(new Rectangle(widths[i], heights[i]));
@@ -87,20 +88,5 @@ public class Input implements AlgorithmInput {
    */
   public int getStripWidth() {
     return stripWidth;
-  }
-
-  /** Returns brief description of the input. */
-  public String getDescription() {
-    return description;
-  }
-
-  /** Sets brief description of the input. */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  @Override
-  public String toString() {
-    return getDescription() + "(n = " + rectangles.size() + ", stripWidth = " + stripWidth + ")";
   }
 }

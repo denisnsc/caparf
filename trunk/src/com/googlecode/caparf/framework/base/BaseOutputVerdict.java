@@ -1,17 +1,24 @@
-package com.googlecode.caparf.framework;
+package com.googlecode.caparf.framework.base;
 
-public abstract class AlgorithmOutputVerdict {
+/**
+ * Base class for output verdict.
+ *
+ * @author denis.nsc@gmail.com (Denis Nazarov)
+ */
+public abstract class BaseOutputVerdict {
+
+  /** Possible verdicts for output verification. */
   public enum Verdict {
-    CORRECT_ANSWER,
-    WRONG_ANSWER,
+    VALID_OUTPUT,
+    INVALID_OUTPUT,
     TIME_LIMIT_EXCEEDED,
     MEMORY_LIMIT_EXCEEDED,
     RUNTIME_ERROR
   }
-  
-  private Verdict verdict;  
-  private String comment;  
- 
+
+  private Verdict verdict;
+  private String comment;
+
   public Verdict getVerdict() {
     return verdict;
   }
@@ -23,5 +30,5 @@ public abstract class AlgorithmOutputVerdict {
   }
   public void setComment(String comment) {
     this.comment = comment;
-  }  
+  }
 }

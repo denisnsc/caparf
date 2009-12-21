@@ -1,4 +1,4 @@
-package com.googlecode.caparf.tests.spp2d;
+package com.googlecode.caparf.inputs.spp2d;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 import com.googlecode.caparf.framework.spp2d.Input;
-import com.googlecode.caparf.framework.spp2d.InputReader;
 import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
 
 /**
@@ -21,7 +20,9 @@ import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class BerkeyWangGenerator extends InputReader {
+public class BerkeyWangGenerator {
+  
+  public static final String INPUT_IDENTIFIER_PREFIX = "spp2d.Berkey and Wang instances.";
 
   public enum Type {
     CLASS_I   (1, 10,  1, 10,  10 ),
@@ -78,12 +79,14 @@ public class BerkeyWangGenerator extends InputReader {
 
   public Input generateInstance(int itemsCount, int minHeight, int maxHeight, int minWidth,
       int maxWidth, int width) {
+    long seed = System.currentTimeMillis();
+    random.setSeed(seed);
     ArrayList<Rectangle> items = new ArrayList<Rectangle>(itemsCount);
     for (int i = 0; i < itemsCount; i++) {
       items.add(new Rectangle(random.nextInt(maxHeight - minHeight + 1) + minHeight,
           random.nextInt(maxWidth - minWidth + 1) + minWidth));
     }
-    return new Input(items, width);
+    return new Input(items, width, INPUT_IDENTIFIER_PREFIX + "random." + seed);
   }
   
   public static List<Input> getReferenceInstances(Type type) {
@@ -111,8 +114,8 @@ public class BerkeyWangGenerator extends InputReader {
           widths[i] = scanner.nextInt();
           heights[i] = scanner.nextInt();
         }
-        Input instance = new Input(widths, heights, stripWidth);
-        instance.setDescription("Berkey and Wang instance, class " + type + ", id = " + (id + 1));
+        Input instance = new Input(widths, heights, stripWidth, INPUT_IDENTIFIER_PREFIX + "Class " +
+            (type.ordinal() + 1) + "." + String.format("%02d", id + 1));
         instances.add(instance);
       }     
       REFERENCE_INSTANCES.put(type, instances);

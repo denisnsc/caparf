@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import com.googlecode.caparf.framework.spp2d.Algorithm;
+import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
 
@@ -32,7 +32,7 @@ import com.googlecode.caparf.framework.spp2d.Output;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class SimpleFit implements Algorithm {
+public class SimpleFit extends Algorithm<Input, Output> {
 
   /** Id corresponding to no rectangle. */
   public static final int ID_NO_RECT = -1;
@@ -224,9 +224,9 @@ public class SimpleFit implements Algorithm {
   }
 
   @Override
-  public String toString() {
-    return "SimpleFit(" + itemOrder + ", " + placementStrategy + ")@" +
-        Integer.toHexString(hashCode());
+  public String getDisplayName() {
+    return (placementStrategy == PlacementStrategy.DEFAULT ? "" : "Greedy") +
+        (itemOrder == ItemOrder.NEXT_ITEM ? "Next" : "Fist") + "Fit";
   }
 
   /**
