@@ -1,0 +1,7 @@
+#summary Instructions on how to contribute to this project
+#labels Phase-Implementation
+
+  * Checkout the code: `svn checkout https://caparf.googlecode.com/svn/trunk/ caparf --username your-user-name`.
+  * Edit the code.
+  * Send a code review to *caparf-code-review(#)googlegroups.com* using [http://codereview.appspot.com/static/upload.py Reitveld's upload.py] or [http://codereview.appspot.com/new Reitveld's "Create Issue" form].
+  * Your CL will be submitted by reviewer once you've got LGTM (looks good to me).
