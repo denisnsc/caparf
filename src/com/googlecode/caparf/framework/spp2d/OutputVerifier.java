@@ -1,6 +1,7 @@
 package com.googlecode.caparf.framework.spp2d;
 
 import com.googlecode.caparf.framework.base.BaseOutputVerifier;
+import com.googlecode.caparf.framework.base.BaseOutputVerdict;
 import com.googlecode.caparf.framework.base.BaseOutputVerdict.Verdict;
 import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
 import com.googlecode.caparf.framework.spp2d.Output.Point2D;
@@ -12,11 +13,11 @@ import com.googlecode.caparf.framework.spp2d.Output.Point2D;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class OutputVerifier implements BaseOutputVerifier<Input, Output, OutputVerdict> {
+public class OutputVerifier implements BaseOutputVerifier<Input, Output, BaseOutputVerdict> {
 
   @Override
-  public OutputVerdict verify(Input input, Output output) {
-    OutputVerdict verdict = new OutputVerdict();
+  public BaseOutputVerdict verify(Input input, Output output) {
+    BaseOutputVerdict verdict = new BaseOutputVerdict();
 
     // Verifies that input and output has the same number of rectangle items
     if (input.getRectangles().size() != output.getPlacement().size()) {
@@ -37,13 +38,11 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output, OutputV
     }
 
     // Verifies that rectangle items do not intersect
-    int stripHeight = 0;
     for (int i = 0; i < input.getRectangles().size(); i++) {
       int xli = output.getPlacement().get(i).x;
       int xri = xli + input.getRectangles().get(i).width;
       int yli = output.getPlacement().get(i).y;
       int yri = yli + input.getRectangles().get(i).height;
-      stripHeight = Math.max(stripHeight, yri);
       for (int j = i + 1; j < input.getRectangles().size(); j++) {
         int xlj = output.getPlacement().get(j).x;
         int xrj = xlj + input.getRectangles().get(j).width;
@@ -65,7 +64,6 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output, OutputV
 
     // Output is correct
     verdict.setVerdict(Verdict.VALID_OUTPUT);
-    verdict.setStripHeight(stripHeight);
 
     return verdict;
   }

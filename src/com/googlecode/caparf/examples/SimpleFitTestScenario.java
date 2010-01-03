@@ -4,12 +4,12 @@ import com.googlecode.caparf.algorithms.spp2d.SimpleFit;
 import com.googlecode.caparf.algorithms.spp2d.SimpleFit.ItemOrder;
 import com.googlecode.caparf.algorithms.spp2d.SimpleFit.PlacementStrategy;
 import com.googlecode.caparf.algorithms.spp2d.lowerbounds.ContinuousBound;
+import com.googlecode.caparf.framework.base.BaseOutputVerdict;
 import com.googlecode.caparf.framework.base.InputSuite;
 import com.googlecode.caparf.framework.runner.CaparfCore;
 import com.googlecode.caparf.framework.runner.Scenario;
 import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
-import com.googlecode.caparf.framework.spp2d.OutputVerdict;
 import com.googlecode.caparf.framework.spp2d.OutputVerifier;
 import com.googlecode.caparf.framework.spp2d.StatsCollectorListener;
 import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
@@ -19,7 +19,8 @@ public class SimpleFitTestScenario {
 
   public static void main(String[] args) {
     // Create scenario instance
-    Scenario<Input, Output, OutputVerdict> scenario = new Scenario<Input, Output, OutputVerdict>();
+    Scenario<Input, Output, BaseOutputVerdict> scenario =
+        new Scenario<Input, Output, BaseOutputVerdict>();
 
     // Add algorithms to scenario
     scenario.addAlgorithms(
@@ -42,8 +43,8 @@ public class SimpleFitTestScenario {
     scenario.setVerifier(new OutputVerifier());
 
     // Run scenario
-    CaparfCore<Input, Output, OutputVerdict> invoker =
-        new CaparfCore<Input, Output, OutputVerdict>();
+    CaparfCore<Input, Output, BaseOutputVerdict> invoker =
+        new CaparfCore<Input, Output, BaseOutputVerdict>();
     invoker.addListener(new StatsCollectorListener(new ContinuousBound()));
     invoker.run(scenario);
   }
