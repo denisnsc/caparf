@@ -191,7 +191,7 @@ public class SimpleFit extends Algorithm<Input, Output> {
       }
     }
 
-    return new Output(placement);
+    return new Output(input, placement);
   }
 
   /**

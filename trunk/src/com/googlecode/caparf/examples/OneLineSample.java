@@ -19,8 +19,8 @@ public class OneLineSample extends Algorithm<Input, Output> {
       lowerLeftPoint.y = currentHeight;
       placement.add(lowerLeftPoint);
       // Add height of the rectangle to the current height
-      currentHeight += rect.height;      
+      currentHeight += rect.height;
     }
-    return new Output(placement);
+    return new Output(input, placement);
   }
 }

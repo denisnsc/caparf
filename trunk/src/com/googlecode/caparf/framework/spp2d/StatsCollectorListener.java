@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.googlecode.caparf.framework.base.Algorithm;
+import com.googlecode.caparf.framework.base.BaseOutputVerdict;
+import com.googlecode.caparf.framework.base.BaseOutputVerdict.Verdict;
 import com.googlecode.caparf.framework.base.InputSuite;
 import com.googlecode.caparf.framework.runner.RunListener;
 import com.googlecode.caparf.framework.runner.Scenario;
@@ -17,7 +19,7 @@ import com.googlecode.caparf.framework.runner.Scenario;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class StatsCollectorListener extends RunListener<Input, Output, OutputVerdict> {
+public class StatsCollectorListener extends RunListener<Input, Output, BaseOutputVerdict> {
 
   /** Lower bound used for calculating stats. */
   private final LowerBound lowerBound;
@@ -33,7 +35,8 @@ public class StatsCollectorListener extends RunListener<Input, Output, OutputVer
   }
 
   @Override
-  public void scenarioRunStarted(Scenario<Input, Output, OutputVerdict> scenario) throws Exception {
+  public void scenarioRunStarted(Scenario<Input, Output, BaseOutputVerdict> scenario)
+      throws Exception {
     algorithmNames = new ArrayList<String>();
     for (Algorithm<Input, Output> algorithm : scenario.getAlgorithms()) {
       algorithmNames.add(algorithm.getDisplayName());
@@ -50,7 +53,7 @@ public class StatsCollectorListener extends RunListener<Input, Output, OutputVer
 
   @Override
   public void testFinished(Algorithm<Input, Output> algorithm, Input input, Output output,
-      OutputVerdict verdict) throws Exception {
+      BaseOutputVerdict verdict) throws Exception {
     root.collect(input.getIdentifier(), algorithm.getDisplayName(), output, verdict);
   }
 
@@ -209,7 +212,7 @@ public class StatsCollectorListener extends RunListener<Input, Output, OutputVer
      * @param output output produced by algorithm
      * @param verdict output verification verdict
      */
-    public void collect(String id, String algorithmName, Output output, OutputVerdict verdict) {
+    public void collect(String id, String algorithmName, Output output, BaseOutputVerdict verdict) {
       int dotIndex = id.indexOf('.');
       String name = dotIndex == -1 ? id : id.substring(0, dotIndex);
       Node child = getChild(name);
@@ -292,8 +295,11 @@ public class StatsCollectorListener extends RunListener<Input, Output, OutputVer
        * @param output output produced by algorithm
        * @param verdict output verification verdict
        */
-      public void collect(String algorithmName, Output output, OutputVerdict verdict) {
-        int stripHeight = verdict.getStripHeight();
+      public void collect(String algorithmName, Output output, BaseOutputVerdict verdict) {
+        if (verdict.getVerdict() != Verdict.VALID_OUTPUT) {
+          return;
+        }
+        int stripHeight = output.calculateObjectiveFunction().intValue();
         height.put(algorithmName, stripHeight);
         gap.put(algorithmName, (stripHeight - lowerBoundSum) * 100.0 / stripHeight);
         bestHeight = Math.min(bestHeight, stripHeight);
