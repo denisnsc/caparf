@@ -1,4 +1,4 @@
-package com.googlecode.caparf.framework.spp2d;
+package com.googlecode.caparf.framework.runner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,22 +7,24 @@ import java.util.List;
 import java.util.Map;
 
 import com.googlecode.caparf.framework.base.Algorithm;
+import com.googlecode.caparf.framework.base.BaseInput;
+import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.BaseOutputVerdict;
 import com.googlecode.caparf.framework.base.BaseOutputVerdict.Verdict;
 import com.googlecode.caparf.framework.base.InputSuite;
-import com.googlecode.caparf.framework.runner.RunListener;
-import com.googlecode.caparf.framework.runner.Scenario;
+import com.googlecode.caparf.framework.base.LowerBound;
 
 /**
- * Listener that collects statistics during 2-dimensional strip packing
- * algorithm's execution and displays it in text form.
+ * Listener that collects statistics during algorithm's execution and displays
+ * it in text form.
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class StatsCollectorListener extends RunListener<Input, Output, BaseOutputVerdict> {
+public class StatsCollectorListener<I extends BaseInput, O extends BaseOutput,
+    V extends BaseOutputVerdict> extends RunListener<I, O, V> {
 
   /** Lower bound used for calculating stats. */
-  private final LowerBound lowerBound;
+  private final LowerBound<I> lowerBound;
 
   /** Sorted list of algorithm display names. */
   private List<String> algorithmNames;
@@ -30,15 +32,14 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
   /** Root of sorted input identifiers tree. */
   private Node root;
 
-  public StatsCollectorListener(LowerBound lowerBound) {
+  public StatsCollectorListener(LowerBound<I> lowerBound) {
     this.lowerBound = lowerBound;
   }
 
   @Override
-  public void scenarioRunStarted(Scenario<Input, Output, BaseOutputVerdict> scenario)
-      throws Exception {
+  public void scenarioRunStarted(Scenario<I, O, V> scenario) throws Exception {
     algorithmNames = new ArrayList<String>();
-    for (Algorithm<Input, Output> algorithm : scenario.getAlgorithms()) {
+    for (Algorithm<I, O> algorithm : scenario.getAlgorithms()) {
       algorithmNames.add(algorithm.getDisplayName());
     }
     Collections.sort(algorithmNames);
@@ -52,8 +53,8 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
   }
 
   @Override
-  public void testFinished(Algorithm<Input, Output> algorithm, Input input, Output output,
-      BaseOutputVerdict verdict) throws Exception {
+  public void testFinished(Algorithm<I, O> algorithm, I input, O output, V verdict)
+      throws Exception {
     root.collect(input.getIdentifier(), algorithm.getDisplayName(), output, verdict);
   }
 
@@ -96,9 +97,9 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
    *
    * @return root of sorted input identifiers tree.
    */
-  private Node buildSortedInputsTree(InputSuite<Input> suite) {
+  private Node buildSortedInputsTree(InputSuite<I> suite) {
     Node root = new Node("root");
-    for (Input input : suite.getAll()) {
+    for (I input : suite.getAll()) {
       root.addNode(input.getIdentifier(), lowerBound.calculateLowerBound(input));
     }
     root.normalize();
@@ -106,7 +107,7 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
   }
 
   /** Node of input identifiers tree. */
-  public static class Node implements Comparable<Node> {
+  public class Node implements Comparable<Node> {
     /** Name of node. */
     protected final String name;
 
@@ -120,12 +121,13 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
     protected int inputsCount;
 
     /** Sum of lower bounds for inputs in subtree rooted at this node. */
-    protected int lowerBoundSum;
+    protected double lowerBoundSum;
 
     /**
-     * Best strip height achieved by algorithms. It makes sense only for leafs.
+     * Best objective function value achieved by algorithms. It makes sense only
+     * for leafs.
      */
-    protected int bestHeight;
+    protected double bestObjective;
 
     /**
      * Creates tree node with the given name.
@@ -135,8 +137,9 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
     public Node(String name) {
       this.name = name;
       this.children = new ArrayList<Node>();
-      this.inputsCount = this.lowerBoundSum = 0;
-      this.bestHeight = Integer.MAX_VALUE;
+      this.inputsCount = 0;
+      this.lowerBoundSum = 0.0;
+      this.bestObjective = Double.MAX_VALUE;
       this.stats = new AlgorithmStats();
     }
 
@@ -145,7 +148,7 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
      *
      * @param id part of input identifier
      */
-    public void addNode(String id, int lowerBound) {
+    public void addNode(String id, double lowerBound) {
       inputsCount += 1;
       lowerBoundSum += lowerBound;
 
@@ -212,7 +215,7 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
      * @param output output produced by algorithm
      * @param verdict output verification verdict
      */
-    public void collect(String id, String algorithmName, Output output, BaseOutputVerdict verdict) {
+    public void collect(String id, String algorithmName, O output, V verdict) {
       int dotIndex = id.indexOf('.');
       String name = dotIndex == -1 ? id : id.substring(0, dotIndex);
       Node child = getChild(name);
@@ -254,7 +257,7 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
     /**
      * @return sum of lower bounds for inputs in subtree rooted at this node
      */
-    public int getLowerBoundSum() {
+    public double getLowerBoundSum() {
       return lowerBoundSum;
     }
 
@@ -272,8 +275,11 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
 
     /** Algorithm statistics. */
     public class AlgorithmStats {
-      /** Sum of heights per algorithm. */
-      protected Map<String, Integer> height;
+      /** Largest relative error in comparing doubles. */
+      public static final double EPS = 1e-9;
+
+      /** Sum of objective function values per algorithm. */
+      protected Map<String, Double> objective;
 
       /** Best outputs count per algorithm. */
       protected Map<String, Integer> bestCount;
@@ -282,7 +288,7 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
       protected Map<String, Double> gap;
 
       public AlgorithmStats() {
-        height = new HashMap<String, Integer>();
+        objective = new HashMap<String, Double>();
         bestCount = new HashMap<String, Integer>();
         gap = new HashMap<String, Double>();
       }
@@ -295,16 +301,17 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
        * @param output output produced by algorithm
        * @param verdict output verification verdict
        */
-      public void collect(String algorithmName, Output output, BaseOutputVerdict verdict) {
+      public void collect(String algorithmName, O output, V verdict) {
         if (verdict.getVerdict() != Verdict.VALID_OUTPUT) {
           return;
         }
-        int stripHeight = output.calculateObjectiveFunction().intValue();
-        height.put(algorithmName, stripHeight);
-        gap.put(algorithmName, (stripHeight - lowerBoundSum) * 100.0 / stripHeight);
-        bestHeight = Math.min(bestHeight, stripHeight);
-        for (String id : height.keySet()) {
-          bestCount.put(id, height.get(id) == bestHeight ? 1 : 0);
+        double objectiveValue = output.calculateObjectiveFunction().doubleValue();
+        objective.put(algorithmName, objectiveValue);
+        gap.put(algorithmName, (objectiveValue - lowerBoundSum) * 100.0 / objectiveValue);
+        bestObjective = Math.min(bestObjective, objectiveValue);
+        for (String id : objective.keySet()) {
+          double diff = Math.abs(objective.get(id) - bestObjective) / bestObjective;
+          bestCount.put(id, diff <= EPS ? 1 : 0);
         }
       }
 
@@ -313,29 +320,29 @@ public class StatsCollectorListener extends RunListener<Input, Output, BaseOutpu
        * non-leafs.
        */
       public void update(String algorithmName) {
-        height.put(algorithmName, Integer.MAX_VALUE);
-        for (String id : height.keySet()) {
-          int heightSum = 0;
+        objective.put(algorithmName, Double.MAX_VALUE);
+        for (String id : objective.keySet()) {
+          double objectiveSum = 0;
           int bestCountSum = 0;
           double gapSum = 0.0;
           for (Node node : children) {
-            if (node.stats.height.containsKey(id)) {
-              heightSum += node.stats.height.get(id);
+            if (node.stats.objective.containsKey(id)) {
+              objectiveSum += node.stats.objective.get(id);
               bestCountSum += node.stats.bestCount.get(id);
               gapSum += node.stats.gap.get(id);
             }
           }
-          height.put(id, heightSum);
+          objective.put(id, objectiveSum);
           bestCount.put(id, bestCountSum);
           gap.put(id, gapSum);
         }
       }
 
       /**
-       * @return sum of heights per algorithm
+       * @return sum of objective function values per algorithm
        */
-      public Map<String, Integer> getHeight() {
-        return height;
+      public Map<String, Double> getObjective() {
+        return objective;
       }
 
       /**

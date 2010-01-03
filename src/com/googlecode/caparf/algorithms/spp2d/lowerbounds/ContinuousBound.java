@@ -1,7 +1,7 @@
 package com.googlecode.caparf.algorithms.spp2d.lowerbounds;
 
+import com.googlecode.caparf.framework.base.LowerBound;
 import com.googlecode.caparf.framework.spp2d.Input;
-import com.googlecode.caparf.framework.spp2d.LowerBound;
 import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
 
 /**
@@ -10,7 +10,7 @@ import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class ContinuousBound implements LowerBound {
+public class ContinuousBound implements LowerBound<Input> {
 
   @Override
   public int calculateLowerBound(Input input) {

@@ -8,10 +8,10 @@ import com.googlecode.caparf.framework.base.BaseOutputVerdict;
 import com.googlecode.caparf.framework.base.InputSuite;
 import com.googlecode.caparf.framework.runner.CaparfCore;
 import com.googlecode.caparf.framework.runner.Scenario;
+import com.googlecode.caparf.framework.runner.StatsCollectorListener;
 import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
 import com.googlecode.caparf.framework.spp2d.OutputVerifier;
-import com.googlecode.caparf.framework.spp2d.StatsCollectorListener;
 import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
 import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator.Type;
 
@@ -45,7 +45,8 @@ public class SimpleFitTestScenario {
     // Run scenario
     CaparfCore<Input, Output, BaseOutputVerdict> invoker =
         new CaparfCore<Input, Output, BaseOutputVerdict>();
-    invoker.addListener(new StatsCollectorListener(new ContinuousBound()));
+    invoker.addListener(
+        new StatsCollectorListener<Input, Output, BaseOutputVerdict>(new ContinuousBound()));
     invoker.run(scenario);
   }
 }

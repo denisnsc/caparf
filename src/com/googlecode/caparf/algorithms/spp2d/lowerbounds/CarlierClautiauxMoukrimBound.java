@@ -1,7 +1,7 @@
 package com.googlecode.caparf.algorithms.spp2d.lowerbounds;
 
+import com.googlecode.caparf.framework.base.LowerBound;
 import com.googlecode.caparf.framework.spp2d.Input;
-import com.googlecode.caparf.framework.spp2d.LowerBound;
 
 /**
  * Lower bound that was proposed by Carlier et al. in <a
@@ -19,10 +19,10 @@ import com.googlecode.caparf.framework.spp2d.LowerBound;
  * C^0.5)}, where C is the strip width.
  * <p>
  * This class is thread-safe.
- * 
+ *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class CarlierClautiauxMoukrimBound implements LowerBound {
+public class CarlierClautiauxMoukrimBound implements LowerBound<Input> {
 
   @Override
   public int calculateLowerBound(Input input) {

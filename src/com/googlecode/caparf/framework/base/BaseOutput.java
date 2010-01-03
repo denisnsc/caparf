@@ -18,5 +18,5 @@ public interface BaseOutput {
    *
    * @return objective function value
    */
-  public Number calculateObjectiveFunction();
+  Number calculateObjectiveFunction();
 }
