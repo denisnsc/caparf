@@ -3,8 +3,8 @@ package com.googlecode.caparf.framework.runner;
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseOutput;
-import com.googlecode.caparf.framework.base.BaseOutputVerdict;
-import com.googlecode.caparf.framework.base.BaseOutputVerdict.Verdict;
+import com.googlecode.caparf.framework.base.Verdict;
+import com.googlecode.caparf.framework.base.Verdict.Result;
 
 /**
  * Simple implementation of {@link RunListener} that collects number of
@@ -16,14 +16,13 @@ import com.googlecode.caparf.framework.base.BaseOutputVerdict.Verdict;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class TextListener<I extends BaseInput, O extends BaseOutput, V extends BaseOutputVerdict>
-    extends RunListener<I, O, V> {
+public class TextListener<I extends BaseInput, O extends BaseOutput> extends RunListener<I, O> {
 
   private long startMillis, finishMillis;
   private int total, valid;
 
   @Override
-  public void scenarioRunStarted(Scenario<I, O, V> scenario) throws Exception {
+  public void scenarioRunStarted(Scenario<I, O> scenario) throws Exception {
     startMillis = System.currentTimeMillis();
     total = valid = 0;
     System.out.println("Starting scenario");
@@ -43,10 +42,10 @@ public class TextListener<I extends BaseInput, O extends BaseOutput, V extends B
   }
 
   @Override
-  public void testFinished(Algorithm<I, O> algorithm, I input, O output, V verdict)
+  public void testFinished(Algorithm<I, O> algorithm, I input, O output, Verdict verdict)
       throws Exception {
     total++;
-    if (verdict.getVerdict() == Verdict.VALID_OUTPUT) {
+    if (verdict.getResult() == Result.VALID_OUTPUT) {
       System.out.print('.');
       valid++;
     } else {

@@ -1,8 +1,8 @@
 package com.googlecode.caparf.framework.spp2d;
 
 import com.googlecode.caparf.framework.base.BaseOutputVerifier;
-import com.googlecode.caparf.framework.base.BaseOutputVerdict;
-import com.googlecode.caparf.framework.base.BaseOutputVerdict.Verdict;
+import com.googlecode.caparf.framework.base.Verdict;
+import com.googlecode.caparf.framework.base.Verdict.Result;
 import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
 import com.googlecode.caparf.framework.spp2d.Output.Point2D;
 
@@ -13,15 +13,15 @@ import com.googlecode.caparf.framework.spp2d.Output.Point2D;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class OutputVerifier implements BaseOutputVerifier<Input, Output, BaseOutputVerdict> {
+public class OutputVerifier implements BaseOutputVerifier<Input, Output> {
 
   @Override
-  public BaseOutputVerdict verify(Input input, Output output) {
-    BaseOutputVerdict verdict = new BaseOutputVerdict();
+  public Verdict verify(Input input, Output output) {
+    Verdict verdict = new Verdict();
 
     // Verifies that input and output has the same number of rectangle items
     if (input.getRectangles().size() != output.getPlacement().size()) {
-      verdict.setVerdict(Verdict.INVALID_OUTPUT);
+      verdict.setResult(Result.INVALID_OUTPUT);
       verdict.setComment("Input and output has different number of rectangle items");
       return verdict;
     }
@@ -31,7 +31,7 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output, BaseOut
       Rectangle rect = input.getRectangles().get(i);
       Point2D position = output.getPlacement().get(i);
       if (position.x < 0 || position.x + rect.width > input.getStripWidth() || position.y < 0) {
-        verdict.setVerdict(Verdict.INVALID_OUTPUT);
+        verdict.setResult(Result.INVALID_OUTPUT);
         verdict.setComment("Rectangle item #" + i + " does not fit into the strip");
         return verdict;
       }
@@ -55,7 +55,7 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output, BaseOut
         int yr = Math.max(Math.min(yri, yrj), yl);
 
         if ((xr - xl) * (yr - yl) > 0) {
-          verdict.setVerdict(Verdict.INVALID_OUTPUT);
+          verdict.setResult(Result.INVALID_OUTPUT);
           verdict.setComment("Rectangle items #" + i + " and #" + j + " intersects");
           return verdict;
         }
@@ -63,7 +63,7 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output, BaseOut
     }
 
     // Output is correct
-    verdict.setVerdict(Verdict.VALID_OUTPUT);
+    verdict.setResult(Result.VALID_OUTPUT);
 
     return verdict;
   }

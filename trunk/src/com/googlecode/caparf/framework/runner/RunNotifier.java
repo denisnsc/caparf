@@ -7,28 +7,28 @@ import java.util.List;
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseOutput;
-import com.googlecode.caparf.framework.base.BaseOutputVerdict;
+import com.googlecode.caparf.framework.base.Verdict;
 
 /**
  * This class is used by Runner to notify Caparf of progress running scenario.
  */
-public class RunNotifier<I extends BaseInput, O extends BaseOutput, V extends BaseOutputVerdict> {
+public class RunNotifier<I extends BaseInput, O extends BaseOutput> {
 
-  private final List<RunListener<I, O, V>> listeners = new ArrayList<RunListener<I, O, V>>();
+  private final List<RunListener<I, O>> listeners = new ArrayList<RunListener<I, O>>();
 
   /** Internal use only. */
-  public void addListener(RunListener<I, O, V> listener) {
+  public void addListener(RunListener<I, O> listener) {
     listeners.add(listener);
   }
 
   /** Internal use only. */
-  public void removeListener(RunListener<I, O, V> listener) {
+  public void removeListener(RunListener<I, O> listener) {
     listeners.remove(listener);
   }
 
   private abstract class SafeNotifier {
     void run() {
-      for (Iterator<RunListener<I, O, V>> all = listeners.iterator(); all.hasNext();)
+      for (Iterator<RunListener<I, O>> all = listeners.iterator(); all.hasNext();)
         try {
           notifyListener(all.next());
         } catch (Exception e) {
@@ -37,14 +37,14 @@ public class RunNotifier<I extends BaseInput, O extends BaseOutput, V extends Ba
         }
     }
 
-    abstract protected void notifyListener(RunListener<I, O, V> each) throws Exception;
+    abstract protected void notifyListener(RunListener<I, O> each) throws Exception;
   }
 
   /** Do not invoke. */
-  public void fireScenarioRunStarted(final Scenario<I, O, V> scenario) {
+  public void fireScenarioRunStarted(final Scenario<I, O> scenario) {
     new SafeNotifier() {
       @Override
-      protected void notifyListener(RunListener<I, O, V> each) throws Exception {
+      protected void notifyListener(RunListener<I, O> each) throws Exception {
         each.scenarioRunStarted(scenario);
       };
     }.run();
@@ -54,7 +54,7 @@ public class RunNotifier<I extends BaseInput, O extends BaseOutput, V extends Ba
   public void fireScenarioRunFinished() {
     new SafeNotifier() {
       @Override
-      protected void notifyListener(RunListener<I, O, V> each) throws Exception {
+      protected void notifyListener(RunListener<I, O> each) throws Exception {
         each.scenarioRunFinished();
       };
     }.run();
@@ -67,7 +67,7 @@ public class RunNotifier<I extends BaseInput, O extends BaseOutput, V extends Ba
   public void fireTestStarted(final Algorithm<I, O> algorithm, final I input) {
     new SafeNotifier() {
       @Override
-      protected void notifyListener(RunListener<I, O, V> each) throws Exception {
+      protected void notifyListener(RunListener<I, O> each) throws Exception {
         each.testStarted(algorithm, input);
       };
     }.run();
@@ -77,10 +77,10 @@ public class RunNotifier<I extends BaseInput, O extends BaseOutput, V extends Ba
    * Invoke to tell listeners that {@code algorithm} has solved {@code input} .
    */
   public void fireTestFinished(final Algorithm<I, O> algorithm, final I input, final O output,
-      final V verdict) {
+      final Verdict verdict) {
     new SafeNotifier() {
       @Override
-      protected void notifyListener(RunListener<I, O, V> each) throws Exception {
+      protected void notifyListener(RunListener<I, O> each) throws Exception {
         each.testFinished(algorithm, input, output, verdict);
       };
     }.run();
