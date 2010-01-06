@@ -4,7 +4,6 @@ import com.googlecode.caparf.algorithms.spp2d.SimpleFit;
 import com.googlecode.caparf.algorithms.spp2d.SimpleFit.ItemOrder;
 import com.googlecode.caparf.algorithms.spp2d.SimpleFit.PlacementStrategy;
 import com.googlecode.caparf.algorithms.spp2d.lowerbounds.ContinuousBound;
-import com.googlecode.caparf.framework.base.BaseOutputVerdict;
 import com.googlecode.caparf.framework.base.InputSuite;
 import com.googlecode.caparf.framework.runner.CaparfCore;
 import com.googlecode.caparf.framework.runner.Scenario;
@@ -19,8 +18,7 @@ public class SimpleFitTestScenario {
 
   public static void main(String[] args) {
     // Create scenario instance
-    Scenario<Input, Output, BaseOutputVerdict> scenario =
-        new Scenario<Input, Output, BaseOutputVerdict>();
+    Scenario<Input, Output> scenario = new Scenario<Input, Output>();
 
     // Add algorithms to scenario
     scenario.addAlgorithms(
@@ -43,10 +41,8 @@ public class SimpleFitTestScenario {
     scenario.setVerifier(new OutputVerifier());
 
     // Run scenario
-    CaparfCore<Input, Output, BaseOutputVerdict> invoker =
-        new CaparfCore<Input, Output, BaseOutputVerdict>();
-    invoker.addListener(
-        new StatsCollectorListener<Input, Output, BaseOutputVerdict>(new ContinuousBound()));
+    CaparfCore<Input, Output> invoker = new CaparfCore<Input, Output>();
+    invoker.addListener(new StatsCollectorListener<Input, Output>(new ContinuousBound()));
     invoker.run(scenario);
   }
 }

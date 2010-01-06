@@ -5,12 +5,10 @@ package com.googlecode.caparf.framework.base;
  *
  * @param <I> algorithm input
  * @param <O> algorithm output
- * @param <V> output verification verdict
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public interface BaseOutputVerifier<I extends BaseInput, O extends BaseOutput,
-    V extends BaseOutputVerdict> {
+public interface BaseOutputVerifier<I extends BaseInput, O extends BaseOutput> {
 
   /**
    * Verifies that the given {@code output} is valid.
@@ -19,5 +17,5 @@ public interface BaseOutputVerifier<I extends BaseInput, O extends BaseOutput,
    * @param output algorithm output
    * @return output verification verdict
    */
-  V verify(I input, O output);
+  Verdict verify(I input, O output);
 }

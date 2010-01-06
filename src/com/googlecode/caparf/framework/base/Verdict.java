@@ -1,41 +1,40 @@
 package com.googlecode.caparf.framework.base;
 
 /**
- * Base class for output verification verdict.
+ * Output verification verdict.
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class BaseOutputVerdict {
+public class Verdict {
 
-  /** Possible verdicts for output verification. */
-  public enum Verdict {
+  /** Possible results for output verification. */
+  public enum Result {
     VALID_OUTPUT,
     INVALID_OUTPUT,
     TIME_LIMIT_EXCEEDED,
-    MEMORY_LIMIT_EXCEEDED,
     RUNTIME_ERROR
   }
 
-  /** Output verification verdict. */
-  private Verdict verdict;
+  /** Output verification result. */
+  private Result result;
 
   /** Output verification comment. */
   private String comment;
 
   /**
-   * @return output verification verdict
+   * @return output verification result
    */
-  public Verdict getVerdict() {
-    return verdict;
+  public Result getResult() {
+    return result;
   }
 
   /**
-   * Sets output verification verdict.
+   * Sets output verification result.
    *
-   * @param verdict output verification verdict
+   * @param result output verification result
    */
-  public void setVerdict(Verdict verdict) {
-    this.verdict = verdict;
+  public void setResult(Result result) {
+    this.result = result;
   }
 
   /**
@@ -56,6 +55,6 @@ public class BaseOutputVerdict {
 
   @Override
   public String toString() {
-    return getVerdict() + ": " + getComment();
+    return getResult() + ": " + getComment();
   }
 }

@@ -8,7 +8,6 @@ import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.InputSuite;
 import com.googlecode.caparf.framework.base.BaseOutput;
-import com.googlecode.caparf.framework.base.BaseOutputVerdict;
 import com.googlecode.caparf.framework.base.BaseOutputVerifier;
 
 /**
@@ -16,11 +15,11 @@ import com.googlecode.caparf.framework.base.BaseOutputVerifier;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class Scenario<I extends BaseInput, O extends BaseOutput, V extends BaseOutputVerdict> {
+public class Scenario<I extends BaseInput, O extends BaseOutput> {
 
   private List<Algorithm<I, O>> algorithms;
   private InputSuite<I> inputs;
-  private BaseOutputVerifier<I, O, V> verifier;
+  private BaseOutputVerifier<I, O> verifier;
 
   /**
    * Creates empty scenario.
@@ -48,7 +47,7 @@ public class Scenario<I extends BaseInput, O extends BaseOutput, V extends BaseO
   /**
    * @return verifier to be used in the scenario
    */
-  public BaseOutputVerifier<I, O, V> getVerifier() {
+  public BaseOutputVerifier<I, O> getVerifier() {
     return verifier;
   }
 
@@ -120,7 +119,7 @@ public class Scenario<I extends BaseInput, O extends BaseOutput, V extends BaseO
    *
    * @param verifier verifier to be used in the scenario
    */
-  public void setVerifier(BaseOutputVerifier<I, O, V> verifier) {
+  public void setVerifier(BaseOutputVerifier<I, O> verifier) {
     this.verifier = verifier;
   }
 }

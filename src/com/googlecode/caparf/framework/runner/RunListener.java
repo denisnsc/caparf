@@ -3,7 +3,7 @@ package com.googlecode.caparf.framework.runner;
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseOutput;
-import com.googlecode.caparf.framework.base.BaseOutputVerdict;
+import com.googlecode.caparf.framework.base.Verdict;
 
 /**
  * If you need to respond to the events during a scenario run, extend {@code
@@ -13,12 +13,12 @@ import com.googlecode.caparf.framework.base.BaseOutputVerdict;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class RunListener<I extends BaseInput, O extends BaseOutput, V extends BaseOutputVerdict> {
+public class RunListener<I extends BaseInput, O extends BaseOutput> {
 
   /**
    * Called before scenario has been run.
    */
-  public void scenarioRunStarted(Scenario<I, O, V> scenario) throws Exception {
+  public void scenarioRunStarted(Scenario<I, O> scenario) throws Exception {
   }
 
   /**
@@ -37,7 +37,7 @@ public class RunListener<I extends BaseInput, O extends BaseOutput, V extends Ba
    * Called when an {@code algorithm} has solved {@code input}, whether it
    * succeeds or fails.
    */
-  public void testFinished(Algorithm<I, O> algorithm, I input, O output, V verdict)
+  public void testFinished(Algorithm<I, O> algorithm, I input, O output, Verdict verdict)
       throws Exception {
   }
 }
