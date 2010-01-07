@@ -4,7 +4,6 @@ import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.Verdict;
-import com.googlecode.caparf.framework.base.Verdict.Result;
 
 /**
  * Simple implementation of {@link RunListener} that collects number of
@@ -45,11 +44,17 @@ public class TextListener<I extends BaseInput, O extends BaseOutput> extends Run
   public void testFinished(Algorithm<I, O> algorithm, I input, O output, Verdict verdict)
       throws Exception {
     total++;
-    if (verdict.getResult() == Result.VALID_OUTPUT) {
-      System.out.print('.');
-      valid++;
-    } else {
-      System.out.print('E');
+    switch (verdict.getResult()) {
+      case VALID_OUTPUT:
+        System.out.print('.');
+        valid++;
+        break;
+      case INVALID_OUTPUT:
+        System.out.print('E');
+        break;
+      case FAILED_TO_RUN:
+        System.out.print('F');
+        break;
     }
   }
 }

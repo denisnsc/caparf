@@ -1,9 +1,12 @@
 package com.googlecode.caparf.framework.runner;
 
+import java.lang.management.ManagementFactory;
+
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.Verdict;
+import com.googlecode.caparf.framework.runner.RunInformation;
 
 /**
  * Main class for running caparf scenarios.
@@ -17,6 +20,19 @@ public class CaparfCore<I extends BaseInput, O extends BaseOutput> {
   public CaparfCore() {
     notifier = new RunNotifier<I, O>();
     notifier.addListener(new TextListener<I, O>());
+    configureJVM();
+  }
+  
+  private void configureJVM() {
+    if (!ManagementFactory.getThreadMXBean().isThreadCpuTimeSupported()) {
+      System.err.println("ERROR: Java Vritual Machine does not support thread cpu time");
+    }
+    if (ManagementFactory.getThreadMXBean().isThreadCpuTimeEnabled()) {
+      System.out.println("INFO: Thread cpu time is already enabled");
+    } else {
+      ManagementFactory.getThreadMXBean().setThreadCpuTimeEnabled(true);
+      System.out.println("INFO: Thread cpu time has been enabled");
+    }
   }
 
   /**
@@ -29,8 +45,16 @@ public class CaparfCore<I extends BaseInput, O extends BaseOutput> {
     for (I input : scenario.getInputs().getAll()) {
       for (Algorithm<I, O> algorithm : scenario.getAlgorithms()) {
         notifier.fireTestStarted(algorithm, input);
-        O output = algorithm.solve(input);
-        Verdict verdict = scenario.getVerifier().verify(input, output);
+        RunInformation runInfo = new RunInformation();
+        O output = Runner.run(algorithm, input, scenario.getTimeLimit(), runInfo);
+        Verdict verdict;
+        if (runInfo.getResult() == RunInformation.RunResult.OK) {
+          verdict = scenario.getVerifier().verify(input, output);
+        } else {
+          verdict = new Verdict();
+          verdict.setResult(Verdict.Result.FAILED_TO_RUN);
+        }
+        verdict.setRunInformation(runInfo);
         notifier.fireTestFinished(algorithm, input, output, verdict);
       }
     }

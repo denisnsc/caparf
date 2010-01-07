@@ -19,6 +19,14 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output> {
   public Verdict verify(Input input, Output output) {
     Verdict verdict = new Verdict();
 
+    // Verifies that output is not null
+    if (output == null) {
+      verdict.setResult(Result.INVALID_OUTPUT);
+      verdict.setComment("Output is null");
+      return verdict;
+    }
+
+
     // Verifies that input and output has the same number of rectangle items
     if (input.getRectangles().size() != output.getPlacement().size()) {
       verdict.setResult(Result.INVALID_OUTPUT);
