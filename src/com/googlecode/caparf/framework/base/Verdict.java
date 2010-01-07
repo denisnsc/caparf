@@ -1,5 +1,7 @@
 package com.googlecode.caparf.framework.base;
 
+import com.googlecode.caparf.framework.runner.RunInformation;
+
 /**
  * Output verification verdict.
  *
@@ -9,10 +11,12 @@ public class Verdict {
 
   /** Possible results for output verification. */
   public enum Result {
+    /** Output produced by algorithm is valid. */
     VALID_OUTPUT,
+    /** Output produced by algorithm is invalid. */
     INVALID_OUTPUT,
-    TIME_LIMIT_EXCEEDED,
-    RUNTIME_ERROR
+    /** Algorithm failed to produce output. */
+    FAILED_TO_RUN
   }
 
   /** Output verification result. */
@@ -20,6 +24,9 @@ public class Verdict {
 
   /** Output verification comment. */
   private String comment;
+
+  /** Information about algorithm execution. */
+  private RunInformation runInformation;
 
   /**
    * @return output verification result
@@ -51,6 +58,22 @@ public class Verdict {
    */
   public void setComment(String comment) {
     this.comment = comment;
+  }
+
+  /**
+   * @return information about algorithm execution
+   */
+  public RunInformation getRunInformation() {
+    return runInformation;
+  }
+
+  /**
+   * Sets information about algorithm execution.
+   *
+   * @param runInformation information about algorithm execution
+   */
+  public void setRunInformation(RunInformation runInformation) {
+    this.runInformation = runInformation;
   }
 
   @Override

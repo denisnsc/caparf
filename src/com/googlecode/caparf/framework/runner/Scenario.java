@@ -20,6 +20,7 @@ public class Scenario<I extends BaseInput, O extends BaseOutput> {
   private List<Algorithm<I, O>> algorithms;
   private InputSuite<I> inputs;
   private BaseOutputVerifier<I, O> verifier;
+  private long timeLimit;
 
   /**
    * Creates empty scenario.
@@ -28,6 +29,7 @@ public class Scenario<I extends BaseInput, O extends BaseOutput> {
     algorithms = new ArrayList<Algorithm<I, O>>();
     inputs = new InputSuite<I>();
     verifier = null;
+    timeLimit = 0;
   }
 
   /**
@@ -121,5 +123,25 @@ public class Scenario<I extends BaseInput, O extends BaseOutput> {
    */
   public void setVerifier(BaseOutputVerifier<I, O> verifier) {
     this.verifier = verifier;
+  }
+
+  /**
+   * @return time limit per algorithm run in milliseconds
+   */
+  public long getTimeLimit() {
+    return timeLimit;
+  }
+
+  /**
+   * Sets time limit per algorithm run. {@code 0} means that algorithms will be
+   * run without limits.
+   *
+   * @param millis time limit per algorithm run in milliseconds
+   */
+  public void setTimeLimit(long millis) {
+    if (millis < 0) {
+      throw new IllegalArgumentException("time limit is negative");
+    }
+    this.timeLimit = millis;
   }
 }

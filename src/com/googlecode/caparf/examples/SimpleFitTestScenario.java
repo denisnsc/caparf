@@ -19,6 +19,7 @@ public class SimpleFitTestScenario {
   public static void main(String[] args) {
     // Create scenario instance
     Scenario<Input, Output> scenario = new Scenario<Input, Output>();
+    scenario.setTimeLimit(5000);
 
     // Add algorithms to scenario
     scenario.addAlgorithms(
