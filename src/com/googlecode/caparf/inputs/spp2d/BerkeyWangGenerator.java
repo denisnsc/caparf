@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import com.googlecode.caparf.framework.spp2d.Input;
-import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
+import com.googlecode.caparf.framework.spp2d.Rectangle;
 
 /**
  * Test instances generator proposed by Berkey and Wang. For the reference look
@@ -21,8 +21,8 @@ import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
 public class BerkeyWangGenerator {
-  
-  public static final String INPUT_IDENTIFIER_PREFIX = "spp2d.Berkey and Wang instances.";
+
+  public static final String INPUT_IDENTIFIER_PREFIX = "spp2d.Berkey and Wang.";
 
   public enum Type {
     CLASS_I   (1, 10,  1, 10,  10 ),
@@ -83,41 +83,39 @@ public class BerkeyWangGenerator {
     random.setSeed(seed);
     ArrayList<Rectangle> items = new ArrayList<Rectangle>(itemsCount);
     for (int i = 0; i < itemsCount; i++) {
-      items.add(new Rectangle(random.nextInt(maxHeight - minHeight + 1) + minHeight,
-          random.nextInt(maxWidth - minWidth + 1) + minWidth));
+      items.add(new Rectangle(random.nextInt(maxWidth - minWidth + 1) + minWidth,
+          random.nextInt(maxHeight - minHeight + 1) + minHeight));
     }
     return new Input(items, width, INPUT_IDENTIFIER_PREFIX + "random." + seed);
   }
-  
+
   public static List<Input> getReferenceInstances(Type type) {
     return REFERENCE_INSTANCES.get(type);
   }
-  
+
   private static final Map<Type, List<Input>> REFERENCE_INSTANCES;
-  
+
   private static final String REFERENCE_INSTANCES_RESOURCE_NAME =
       "BerkeyWangReferenceInstances.txt";
   private static final int INSTANCES_PER_TYPE = 50;
-  
+
   static {
-    REFERENCE_INSTANCES = new HashMap<Type, List<Input>>();    
+    REFERENCE_INSTANCES = new HashMap<Type, List<Input>>();
     Scanner scanner = new Scanner(BerkeyWangGenerator.class.getResourceAsStream(
-        REFERENCE_INSTANCES_RESOURCE_NAME));    
+        REFERENCE_INSTANCES_RESOURCE_NAME));
     for (Type type : Type.values()) {
       ArrayList<Input> instances = new ArrayList<Input>(INSTANCES_PER_TYPE);
       for (int id = 0; id < INSTANCES_PER_TYPE; id++) {
         int stripWidth = scanner.nextInt();
         int itemsCount = scanner.nextInt();
-        int widths[] = new int[itemsCount];
-        int heights[] = new int[itemsCount];
+        Rectangle items[] = new Rectangle[itemsCount];
         for (int i = 0; i < itemsCount; i++) {
-          widths[i] = scanner.nextInt();
-          heights[i] = scanner.nextInt();
+          items[i] = new Rectangle(scanner.nextInt(), scanner.nextInt());
         }
-        Input instance = new Input(widths, heights, stripWidth, INPUT_IDENTIFIER_PREFIX + "Class " +
+        Input instance = new Input(items, stripWidth, INPUT_IDENTIFIER_PREFIX + "Class " +
             (type.ordinal() + 1) + "." + String.format("%02d", id + 1));
         instances.add(instance);
-      }     
+      }
       REFERENCE_INSTANCES.put(type, instances);
     }
   }

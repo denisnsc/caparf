@@ -60,7 +60,7 @@ public class Output implements BaseOutput {
   public Number calculateObjectiveFunction() {
     int stripHeight = 0;
     for (int i = 0; i < placement.size(); i++) {
-      stripHeight = Math.max(stripHeight, placement.get(i).y + input.getRectangles().get(i).height);
+      stripHeight = Math.max(stripHeight, placement.get(i).y + input.getItems().get(i).getHeight());
     }
     return stripHeight;
   }

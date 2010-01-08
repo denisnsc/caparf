@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
+import com.googlecode.caparf.framework.base.BaseItem;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.Interruptible;
 import com.googlecode.caparf.framework.base.LowerBound;
@@ -41,8 +42,8 @@ public final class Runner {
    * @param input input that will be passed to algorithm
    * @return algorithm output or null in case of any problems
    */
-  public static <I extends BaseInput, O extends BaseOutput> O run(final Algorithm<I, O> algorithm,
-      final I input) {
+  public static <I extends BaseInput<? extends BaseItem>, O extends BaseOutput> O run(
+      final Algorithm<I, O> algorithm, final I input) {
     return run(algorithm, input, 0);
   }
 
@@ -62,8 +63,8 @@ public final class Runner {
    *          for infinity
    * @return algorithm output or null in case of any problems
    */
-  public static <I extends BaseInput, O extends BaseOutput> O run(final Algorithm<I, O> algorithm,
-      final I input, long timeLimit) {
+  public static <I extends BaseInput<? extends BaseItem>, O extends BaseOutput> O run(
+      final Algorithm<I, O> algorithm, final I input, long timeLimit) {
     return run(algorithm, input, timeLimit, null);
   }
 
@@ -85,8 +86,8 @@ public final class Runner {
    * @param runInfo information about algorithm run
    * @return algorithm output or null in case of any problems
    */
-  public static <I extends BaseInput, O extends BaseOutput> O run(final Algorithm<I, O> algorithm,
-      final I input, long timeLimit, RunInformation runInfo) {
+  public static <I extends BaseInput<? extends BaseItem>, O extends BaseOutput> O run(
+      final Algorithm<I, O> algorithm, final I input, long timeLimit, RunInformation runInfo) {
     Callable<O> task = new Callable<O>() {
       @Override
       public O call() throws Exception {
@@ -105,7 +106,8 @@ public final class Runner {
    * @param input input that will be passed to lower bound
    * @return lower bound value or null in case of any problems
    */
-  public static <I extends BaseInput> Number run(final LowerBound<I> lowerBound, final I input) {
+  public static <I extends BaseInput<? extends BaseItem>> Number run(final LowerBound<I> lowerBound,
+      final I input) {
     return run(lowerBound, input, 0);
   }
 
@@ -124,8 +126,8 @@ public final class Runner {
    *          0} for infinity
    * @return lower bound value or null in case of any problems
    */
-  public static <I extends BaseInput> Number run(final LowerBound<I> lowerBound, final I input,
-      long timeLimit) {
+  public static <I extends BaseInput<? extends BaseItem>> Number run(final LowerBound<I> lowerBound,
+      final I input, long timeLimit) {
     return run(lowerBound, input, timeLimit, null);
   }
 
@@ -146,8 +148,8 @@ public final class Runner {
    * @param runInfo information about lower bound run
    * @return lower bound value or null in case of any problems
    */
-  public static <I extends BaseInput> Number run(final LowerBound<I> lowerBound, final I input,
-      long timeLimit, RunInformation runInfo) {
+  public static <I extends BaseInput<? extends BaseItem>> Number run(final LowerBound<I> lowerBound,
+      final I input, long timeLimit, RunInformation runInfo) {
     Callable<Number> task = new Callable<Number>() {
       @Override
       public Number call() throws Exception {

@@ -7,7 +7,7 @@ package com.googlecode.caparf.framework.base;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public interface LowerBound<I extends BaseInput> {
+public interface LowerBound<I extends BaseInput<? extends BaseItem>> {
 
   /**
    * Calculates the lower bound for the given {@code input}.
