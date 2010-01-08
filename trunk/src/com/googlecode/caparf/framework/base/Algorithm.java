@@ -8,7 +8,7 @@ package com.googlecode.caparf.framework.base;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public abstract class Algorithm<I extends BaseInput, O extends BaseOutput> {
+public abstract class Algorithm<I extends BaseInput<? extends BaseItem>, O extends BaseOutput> {
 
   /**
    * Runs algorithm for the given {@code input} and returns {@code output}.

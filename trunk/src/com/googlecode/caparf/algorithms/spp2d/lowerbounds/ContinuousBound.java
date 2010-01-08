@@ -2,7 +2,7 @@ package com.googlecode.caparf.algorithms.spp2d.lowerbounds;
 
 import com.googlecode.caparf.framework.base.LowerBound;
 import com.googlecode.caparf.framework.spp2d.Input;
-import com.googlecode.caparf.framework.spp2d.Input.Rectangle;
+import com.googlecode.caparf.framework.spp2d.Rectangle;
 
 /**
  * Naive lower bound is simply the total area of rectangle items divided by
@@ -15,8 +15,8 @@ public class ContinuousBound implements LowerBound<Input> {
   @Override
   public int calculateLowerBound(Input input) {
     int itemsArea = 0;
-    for (Rectangle rect : input.getRectangles()) {
-      itemsArea += rect.height * rect.width;
+    for (Rectangle rect : input.getItems()) {
+      itemsArea += rect.getHeight() * rect.getWidth();
     }
     int result = itemsArea / input.getStripWidth();
     if (itemsArea % input.getStripWidth() > 0) {

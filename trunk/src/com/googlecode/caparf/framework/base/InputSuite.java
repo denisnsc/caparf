@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class InputSuite<I extends BaseInput> {
+public class InputSuite<I extends BaseInput<? extends BaseItem>> {
 
   /** List of algorithm inputs in this suite. */
   private ArrayList<I> algorithmInputs;

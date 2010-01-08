@@ -8,7 +8,7 @@ package com.googlecode.caparf.framework.base;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public interface BaseOutputVerifier<I extends BaseInput, O extends BaseOutput> {
+public interface BaseOutputVerifier<I extends BaseInput<? extends BaseItem>, O extends BaseOutput> {
 
   /**
    * Verifies that the given {@code output} is valid.

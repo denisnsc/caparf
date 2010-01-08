@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
+import com.googlecode.caparf.framework.base.BaseItem;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.Verdict;
 import com.googlecode.caparf.framework.base.Verdict.Result;
@@ -20,7 +21,7 @@ import com.googlecode.caparf.framework.base.LowerBound;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class StatsCollectorListener<I extends BaseInput, O extends BaseOutput>
+public class StatsCollectorListener<I extends BaseInput<? extends BaseItem>, O extends BaseOutput>
     extends RunListener<I, O> {
 
   /** Lower bound used for calculating stats. */

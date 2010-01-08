@@ -43,9 +43,9 @@ public class CarlierClautiauxMoukrimBound implements LowerBound<Input> {
   /** Calculates lower bound for the given parameter {@code k}. */
   private int getBound(Input input, int k) {
     int totalArea = 0;
-    for (int i = 0; i < input.getRectangles().size(); i++) {
-      totalArea += input.getRectangles().get(i).height *
-          f(input.getRectangles().get(i).width, input.getStripWidth(), k);
+    for (int i = 0; i < input.getItemsCount(); i++) {
+      totalArea += input.getItems().get(i).getHeight() *
+          f(input.getItems().get(i).getWidth(), input.getStripWidth(), k);
     }
     int ck = 2 * (input.getStripWidth() / k);
     int ret = totalArea / ck;

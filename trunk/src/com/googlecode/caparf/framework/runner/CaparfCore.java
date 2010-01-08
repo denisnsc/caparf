@@ -4,6 +4,7 @@ import java.lang.management.ManagementFactory;
 
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
+import com.googlecode.caparf.framework.base.BaseItem;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.Verdict;
 import com.googlecode.caparf.framework.runner.RunInformation;
@@ -13,7 +14,7 @@ import com.googlecode.caparf.framework.runner.RunInformation;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class CaparfCore<I extends BaseInput, O extends BaseOutput> {
+public class CaparfCore<I extends BaseInput<? extends BaseItem>, O extends BaseOutput> {
 
   private RunNotifier<I, O> notifier;
 
@@ -22,7 +23,7 @@ public class CaparfCore<I extends BaseInput, O extends BaseOutput> {
     notifier.addListener(new TextListener<I, O>());
     configureJVM();
   }
-  
+
   private void configureJVM() {
     if (!ManagementFactory.getThreadMXBean().isThreadCpuTimeSupported()) {
       System.err.println("ERROR: Java Vritual Machine does not support thread cpu time");
@@ -40,16 +41,17 @@ public class CaparfCore<I extends BaseInput, O extends BaseOutput> {
    *
    * @param scenario scenario to execute
    */
+  @SuppressWarnings("unchecked")
   public void run(Scenario<I, O> scenario) {
     notifier.fireScenarioRunStarted(scenario);
     for (I input : scenario.getInputs().getAll()) {
       for (Algorithm<I, O> algorithm : scenario.getAlgorithms()) {
         notifier.fireTestStarted(algorithm, input);
         RunInformation runInfo = new RunInformation();
-        O output = Runner.run(algorithm, input, scenario.getTimeLimit(), runInfo);
+        O output = Runner.run(algorithm, (I) input.clone(), scenario.getTimeLimit(), runInfo);
         Verdict verdict;
         if (runInfo.getResult() == RunInformation.RunResult.OK) {
-          verdict = scenario.getVerifier().verify(input, output);
+          verdict = scenario.getVerifier().verify((I) input.clone(), output);
         } else {
           verdict = new Verdict();
           verdict.setResult(Verdict.Result.FAILED_TO_RUN);

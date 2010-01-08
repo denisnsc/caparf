@@ -65,8 +65,14 @@ public class SimpleFit extends Algorithm<Input, Output> {
   /** Priority queue that stores segments occupied by rectangles. */
   protected PriorityQueue<Segment> heap;
 
-  /** List of all rectangles, reference to {@code input.getRactangles()}. */
-  protected List<Input.Rectangle> rects;
+  /** Total number of rectangles. */
+  protected int rectsCount;
+
+  /** Width of rectangles, constructed from {@code input.getRactangles()}. */
+  protected int width[];
+
+  /** Height of rectangles, constructed from {@code input.getRactangles()}. */
+  protected int height[];
 
   /** Strip width. */
   protected int stripWidth;
@@ -99,22 +105,28 @@ public class SimpleFit extends Algorithm<Input, Output> {
 
   @Override
   public Output solve(Input input) {
-    rects = input.getRectangles();
+    rectsCount = input.getItemsCount();
+    width = new int[rectsCount];
+    height = new int[rectsCount];
+    for (int i = 0; i < rectsCount; i++) {
+      width[i] = input.getItems().get(i).getWidth();
+      height[i] = input.getItems().get(i).getHeight();
+    }
     stripWidth = input.getStripWidth();
     if (itemOrder == ItemOrder.FIRST_FIT) {
       itemsTree = new ItemsTree();
     }
     placedRects = 0;
 
-    placement = new ArrayList<Output.Point2D>(rects.size());
-    for (int i = 0; i < rects.size(); i++) {
+    placement = new ArrayList<Output.Point2D>(rectsCount);
+    for (int i = 0; i < rectsCount; i++) {
       placement.add(new Output.Point2D());
     }
 
     queue = new LinkedList<Segment>();
     queue.addFirst(new Segment(0, stripWidth, 0, ID_NO_RECT));
 
-    heap = new PriorityQueue<Segment>(rects.size(), new Comparator<Segment>() {
+    heap = new PriorityQueue<Segment>(rectsCount, new Comparator<Segment>() {
       @Override
       public int compare(Segment o1, Segment o2) {
         return (o1.y != o2.y) ? (o1.y - o2.y) : (o1.xl - o2.xl);
@@ -124,7 +136,7 @@ public class SimpleFit extends Algorithm<Input, Output> {
     // current y-coordinate
     int y0 = 0;
 
-    while (placedRects < rects.size()) {
+    while (placedRects < rectsCount) {
       if (!queue.isEmpty()) {
         Segment freeSegment = queue.pollFirst();
         if (freeSegment.rectId == Segment.ID_INVALID) {
@@ -140,8 +152,8 @@ public class SimpleFit extends Algorithm<Input, Output> {
           }
 
           Segment rectSegment = new Segment(freeSegment.xl,
-              freeSegment.xl + rects.get(rectId).width,
-              y0 + rects.get(rectId).height,
+              freeSegment.xl + width[rectId],
+              y0 + height[rectId],
               rectId);
           freeSegment.xl = rectSegment.xr;
 
@@ -199,21 +211,21 @@ public class SimpleFit extends Algorithm<Input, Output> {
    * according to {@link #itemOrder} and removes this rectangle from list of
    * available items.
    *
-   * @param width maximal possible width of rectangle
+   * @param maxWidth maximal possible width of rectangle
    * @return id of rectangle that fits into the given {@code width} or {@link
    *         #ID_NO_RECT} if there is no such rectangle
    */
-  protected int findFeasibleRectangle(int width) {
+  protected int findFeasibleRectangle(int maxWidth) {
     int ret = ID_NO_RECT;
     switch (itemOrder) {
       case NEXT_ITEM:
-        if (placedRects < rects.size() && rects.get(placedRects).width <= width) {
+        if (placedRects < rectsCount && width[placedRects] <= maxWidth) {
           ret = placedRects;
           placedRects += 1;
         }
         break;
       case FIRST_FIT:
-        ret = itemsTree.findFeasibleItem(width);
+        ret = itemsTree.findFeasibleItem(maxWidth);
         if (ret != ID_NO_RECT) {
           itemsTree.removeItem(ret);
           placedRects += 1;
@@ -343,11 +355,11 @@ public class SimpleFit extends Algorithm<Input, Output> {
     /** Constructs items binary tree. */
     public ItemsTree() {
       leafCnt = 1;
-      while (leafCnt < rects.size()) leafCnt <<= 1;
+      while (leafCnt < rectsCount) leafCnt <<= 1;
 
       tree = new int[leafCnt << 1];
       for (int i = 0; i < leafCnt; i++) {
-        tree[leafCnt + i] = i < rects.size() ? rects.get(i).width : stripWidth + 1;
+        tree[leafCnt + i] = i < rectsCount ? width[i] : stripWidth + 1;
       }
       for (int i = leafCnt - 1; i > 0; i--) {
         tree[i] = Math.min(tree[i << 1], tree[(i << 1) | 1]);
@@ -358,19 +370,19 @@ public class SimpleFit extends Algorithm<Input, Output> {
      * Retrieves, but does not remove, the id of first rectangle item that fits
      * into the given {@code width}.
      *
-     * @param width maximal possible width of rectangle
+     * @param maxWidth maximal possible width of rectangle
      * @return the id of first rectangle item that fits into the given {@code
      *         width} or {@link SimpleFit#ID_NO_RECT} if there is no such
      *         rectangle.
      */
-    public int findFeasibleItem(int width) {
-      if (tree[1] > width) {
+    public int findFeasibleItem(int maxWidth) {
+      if (tree[1] > maxWidth) {
         return ID_NO_RECT;
       }
       int ret = 1;
       while (ret < leafCnt) {
         ret <<= 1;
-        if (tree[ret] > width) {
+        if (tree[ret] > maxWidth) {
           ret |= 1;
         }
       }

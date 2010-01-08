@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
+import com.googlecode.caparf.framework.base.BaseItem;
 import com.googlecode.caparf.framework.base.InputSuite;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.BaseOutputVerifier;
@@ -15,7 +16,7 @@ import com.googlecode.caparf.framework.base.BaseOutputVerifier;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class Scenario<I extends BaseInput, O extends BaseOutput> {
+public class Scenario<I extends BaseInput<? extends BaseItem>, O extends BaseOutput> {
 
   private List<Algorithm<I, O>> algorithms;
   private InputSuite<I> inputs;

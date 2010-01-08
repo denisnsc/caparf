@@ -6,13 +6,14 @@ import java.util.List;
 
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
+import com.googlecode.caparf.framework.base.BaseItem;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.Verdict;
 
 /**
  * This class is used by Runner to notify Caparf of progress running scenario.
  */
-public class RunNotifier<I extends BaseInput, O extends BaseOutput> {
+public class RunNotifier<I extends BaseInput<? extends BaseItem>, O extends BaseOutput> {
 
   private final List<RunListener<I, O>> listeners = new ArrayList<RunListener<I, O>>();
 
