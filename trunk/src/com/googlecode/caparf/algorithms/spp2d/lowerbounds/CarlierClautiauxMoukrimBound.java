@@ -15,27 +15,20 @@ import com.googlecode.caparf.framework.spp2d.Input;
  * href="http://www.springerlink.com/content/l2602pq543212730/">
  * "A survey of dual-feasible and superadditive functions"</a>.
  * <p>
- * Time complexity of this implementaion of CCM lower bound is {@code O(n *
- * C^0.5)}, where C is the strip width.
+ * Time complexity of this implementaion of CCM lower bound is {@code O(n * C)},
+ * where {@code C} is the strip width.
  * <p>
  * This class is thread-safe.
- *
+ * 
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
 public class CarlierClautiauxMoukrimBound implements LowerBound<Input> {
 
   @Override
-  public int calculateLowerBound(Input input) {
-    int k = 1, ret = 0;
-    while (k * k < input.getStripWidth()) {
+  public Number calculateLowerBound(Input input) {
+    int ret = 0;
+    for (int k = 1; k <= input.getStripWidth(); k++) {
       ret = Math.max(ret, getBound(input, k));
-      k += 1;
-    }
-    int i = (input.getStripWidth() / k) - 1;
-    while (i > 1) {
-      k = input.getStripWidth() / i;
-      ret = Math.max(ret, getBound(input, k));
-      i -= 1;
     }
     return ret;
   }
@@ -61,7 +54,7 @@ public class CarlierClautiauxMoukrimBound implements LowerBound<Input> {
    */
   private int f(int x, int c, int k) {
     if (2 * x > c) {
-      return 2 * (c / k) - (c - x) / k;
+      return 2 * (c / k) - 2 * (c - x) / k;
     } else if (2 * x < c) {
       return 2 * (x / k);
     } else {
