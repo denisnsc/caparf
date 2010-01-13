@@ -13,7 +13,7 @@ import com.googlecode.caparf.framework.spp2d.Rectangle;
 public class ContinuousBound implements LowerBound<Input> {
 
   @Override
-  public int calculateLowerBound(Input input) {
+  public Number calculateLowerBound(Input input) {
     int itemsArea = 0;
     for (Rectangle rect : input.getItems()) {
       itemsArea += rect.getHeight() * rect.getWidth();

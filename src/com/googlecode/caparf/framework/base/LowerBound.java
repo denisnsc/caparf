@@ -15,5 +15,5 @@ public interface LowerBound<I extends BaseInput<? extends BaseItem>> {
    * @param input algorithm input
    * @return lower bound for the given {@code input}
    */
-  int calculateLowerBound(I input);
+  Number calculateLowerBound(I input);
 }

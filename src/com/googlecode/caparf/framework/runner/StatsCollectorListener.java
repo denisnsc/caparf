@@ -10,6 +10,7 @@ import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseItem;
 import com.googlecode.caparf.framework.base.BaseOutput;
+import com.googlecode.caparf.framework.base.ObjectiveComparator;
 import com.googlecode.caparf.framework.base.Verdict;
 import com.googlecode.caparf.framework.base.Verdict.Result;
 import com.googlecode.caparf.framework.base.InputSuite;
@@ -101,7 +102,7 @@ public class StatsCollectorListener<I extends BaseInput<? extends BaseItem>, O e
   private Node buildSortedInputsTree(InputSuite<I> suite) {
     Node root = new Node("root");
     for (I input : suite.getAll()) {
-      root.addNode(input.getIdentifier(), lowerBound.calculateLowerBound(input));
+      root.addNode(input.getIdentifier(), lowerBound.calculateLowerBound(input).doubleValue());
     }
     root.normalize();
     return root;
@@ -276,9 +277,6 @@ public class StatsCollectorListener<I extends BaseInput<? extends BaseItem>, O e
 
     /** Algorithm statistics. */
     public class AlgorithmStats {
-      /** Largest relative error in comparing doubles. */
-      public static final double EPS = 1e-9;
-
       /** Sum of objective function values per algorithm. */
       protected Map<String, Double> objective;
 
@@ -310,9 +308,9 @@ public class StatsCollectorListener<I extends BaseInput<? extends BaseItem>, O e
         objective.put(algorithmName, objectiveValue);
         gap.put(algorithmName, (objectiveValue - lowerBoundSum) * 100.0 / objectiveValue);
         bestObjective = Math.min(bestObjective, objectiveValue);
+        ObjectiveComparator comparator = ObjectiveComparator.getSingleton();
         for (String id : objective.keySet()) {
-          double diff = Math.abs(objective.get(id) - bestObjective) / bestObjective;
-          bestCount.put(id, diff <= EPS ? 1 : 0);
+          bestCount.put(id, comparator.compare(bestObjective, objective.get(id)) == 0 ? 1 : 0);
         }
       }
 
