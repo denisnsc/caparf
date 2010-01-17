@@ -21,7 +21,7 @@ import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
  * {@link BaseItem}.
  * <li><b>Transformation</b>. Inputs can be transformed according to the given
  * transformation which is simply a many-to-one mapping between new and original
- * items. This can be extremly useful for various genetic algorithms.
+ * items. This can be extremely useful for various genetic algorithms.
  * <li><b>Cloning</b>. Inputs are clonable.
  * </ol>
  * <p>
@@ -39,13 +39,13 @@ import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
  * (look at {@link Object#clone()} for the reference). The same applies to input
  * class since it also should be cloneable.
  * <p>
- * Input transformation creates another instance of input according to the given
- * mapping. The most common use case for this is to permute items. However,
- * transformation can be more tricky like replacing second item by first item (
- * the corresponding mapping is {@code transformation = (1, 1, 3, 4, ...)}).
- * Default implementation of {@link #transform(List)} is simply cloning original
- * input and applying transformation to the list of items after that. It should
- * be sufficient for most (if not all) input classes.
+ * Input transformation changes existing instance of input according to the
+ * given mapping. The most common use case for this is to permute items.
+ * However, transformation can be more tricky like replacing second item by
+ * first item ( the corresponding mapping is {@code transformation = (1, 1, 3,
+ * 4, ...)}). Default implementation of {@link #transform(List)} is simply
+ * applying transformation to the list of items. It should be sufficient for
+ * most (if not all) input classes.
  *
  * @param <T> item class
  *
@@ -135,19 +135,16 @@ public abstract class BaseInput<T extends BaseItem> implements BaseCloneable {
    * Transforms input according to {@code transformation}. Transformed input
    * will have exactly the same number of items as the given {@code
    * transformation}. {@code i}-th item in transformed input will be equal to
-   * {@code transformation.get(i)}-th item in original input. It is safe to
-   * down-case transformed input to class of {@code this}.
+   * {@code transformation.get(i)}-th item in original input.
    *
    * @param transformation items transformation
-   * @return transformed input
    */
-  public Object transform(List<Integer> transformation) {
-    BaseInput<T> result = ObjectUtil.safeClone(this);
-    result.items = new ArrayList<T>(transformation.size());
+  public void transform(List<Integer> transformation) {
+    List<T> transformedItems = new ArrayList<T>(transformation.size());
     for (int itemId : transformation) {
-      result.items.add(ObjectUtil.safeClone(items.get(itemId)));
+      transformedItems.add(ObjectUtil.safeClone(items.get(itemId)));
     }
-    return result;
+    items = transformedItems;
   }
 
   @Override

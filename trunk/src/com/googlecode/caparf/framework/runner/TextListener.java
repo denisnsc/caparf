@@ -3,6 +3,7 @@ package com.googlecode.caparf.framework.runner;
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseItem;
+import com.googlecode.caparf.framework.base.BaseItemPlacement;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.Verdict;
 
@@ -16,8 +17,8 @@ import com.googlecode.caparf.framework.base.Verdict;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class TextListener<I extends BaseInput<? extends BaseItem>, O extends BaseOutput>
-    extends RunListener<I, O> {
+public class TextListener<I extends BaseInput<? extends BaseItem>,
+    O extends BaseOutput<? extends BaseItemPlacement>> extends RunListener<I, O> {
 
   private long startMillis, finishMillis;
   private int total, valid;

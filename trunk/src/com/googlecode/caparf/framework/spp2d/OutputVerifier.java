@@ -3,7 +3,6 @@ package com.googlecode.caparf.framework.spp2d;
 import com.googlecode.caparf.framework.base.BaseOutputVerifier;
 import com.googlecode.caparf.framework.base.Verdict;
 import com.googlecode.caparf.framework.base.Verdict.Result;
-import com.googlecode.caparf.framework.spp2d.Output.Point2D;
 
 /**
  * Verifier of output for 2 Dimensional Strip Packing Problem.
@@ -27,7 +26,7 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output> {
 
 
     // Verifies that input and output has the same number of rectangle items
-    if (input.getItemsCount() != output.getPlacement().size()) {
+    if (input.getItemsCount() != output.getPlacementsCount()) {
       verdict.setResult(Result.INVALID_OUTPUT);
       verdict.setComment("Input and output has different number of rectangle items");
       return verdict;
@@ -36,9 +35,9 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output> {
     // Verifies that each rectangle item fits into the strip
     for (int i = 0; i < input.getItemsCount(); i++) {
       Rectangle rect = input.getItems().get(i);
-      Point2D position = output.getPlacement().get(i);
-      if (position.x < 0 || position.x + rect.getWidth() > input.getStripWidth() ||
-          position.y < 0) {
+      RectanglePlacement placement = output.getPlacements().get(i);
+      if (placement.getX() < 0 || placement.getX() + rect.getWidth() > input.getStripWidth() ||
+          placement.getY() < 0) {
         verdict.setResult(Result.INVALID_OUTPUT);
         verdict.setComment("Rectangle item #" + i + " does not fit into the strip");
         return verdict;
@@ -47,14 +46,14 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output> {
 
     // Verifies that rectangle items do not intersect
     for (int i = 0; i < input.getItemsCount(); i++) {
-      int xli = output.getPlacement().get(i).x;
+      int xli = output.getPlacements().get(i).getX();
       int xri = xli + input.getItems().get(i).getWidth();
-      int yli = output.getPlacement().get(i).y;
+      int yli = output.getPlacements().get(i).getY();
       int yri = yli + input.getItems().get(i).getHeight();
       for (int j = i + 1; j < input.getItems().size(); j++) {
-        int xlj = output.getPlacement().get(j).x;
+        int xlj = output.getPlacements().get(j).getX();
         int xrj = xlj + input.getItems().get(j).getWidth();
-        int ylj = output.getPlacement().get(j).y;
+        int ylj = output.getPlacements().get(j).getY();
         int yrj = ylj + input.getItems().get(j).getHeight();
 
         int xl = Math.max(xli, xlj);

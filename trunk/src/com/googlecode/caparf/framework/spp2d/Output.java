@@ -9,59 +9,48 @@ import com.googlecode.caparf.framework.base.BaseOutput;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class Output implements BaseOutput {
-
-  /** Point in 2 Dimensional space. */
-  public static class Point2D {
-    public int x;
-    public int y;
-  }
+public class Output extends BaseOutput<RectanglePlacement> {
 
   /** Corresponding input. */
-  private final Input input;
-
-  /** Rectangle items' placement. */
-  private final List<Point2D> placement;
+  private Input input;
 
   /**
-   * Constructs output for 2 Dimensional Strip Packing Problem. Placement is the
+   * Constructs output for 2 Dimensional Strip Packing Problem. Placements is the
    * ordered list of bottom-left points of corresponding rectangle items.
    *
    * @param input corresponding input for 2 Dimensional Strip Packing Problem
-   * @param placement rectangle items' placement
+   * @param placements rectangle item placements
    */
-  public Output(Input input, List<Point2D> placement) {
+  public Output(Input input, List<RectanglePlacement> placements) {
+    super(placements);
     this.input = input;
-    this.placement = placement;
-  }
-
-  /**
-   * Sets rectangle items' placement.
-   *
-   * @param placement
-   */
-  public List<Point2D> getPlacement() {
-    return placement;
-  }
-
-  @Override
-  public String toString() {
-    String ret = "";
-    for (Point2D point : placement) {
-      if (ret.length() > 0) {
-        ret += ", ";
-      }
-      ret += "(" + point.x + ", " + point.y + ")";
-    }
-    return ret;
   }
 
   @Override
   public Number calculateObjectiveFunction() {
     int stripHeight = 0;
-    for (int i = 0; i < placement.size(); i++) {
-      stripHeight = Math.max(stripHeight, placement.get(i).y + input.getItems().get(i).getHeight());
+    for (int i = 0; i < getPlacementsCount(); i++) {
+      stripHeight = Math.max(stripHeight, getPlacements().get(i).getY() +
+          input.getItems().get(i).getHeight());
     }
     return stripHeight;
+  }
+
+  @Override
+  public void transform(List<Integer> transformation) {
+    super.transform(transformation);
+    input.transform(transformation);
+  }
+
+  @Override
+  public String toString() {
+    String ret = "";
+    for (RectanglePlacement placement : getPlacements()) {
+      if (ret.length() > 0) {
+        ret += ", ";
+      }
+      ret += "(" + placement.getX() + ", " + placement.getY() + ")";
+    }
+    return ret;
   }
 }

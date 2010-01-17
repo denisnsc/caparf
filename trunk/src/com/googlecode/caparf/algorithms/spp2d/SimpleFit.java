@@ -1,15 +1,15 @@
 package com.googlecode.caparf.algorithms.spp2d;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.PriorityQueue;
 
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
+import com.googlecode.caparf.framework.spp2d.RectanglePlacement;
 
 /**
  * SimpleFit can produce the same results as well-known NextFit and FirstFit
@@ -78,7 +78,7 @@ public class SimpleFit extends Algorithm<Input, Output> {
   protected int stripWidth;
 
   /** Positions of rectangles */
-  protected List<Output.Point2D> placement;
+  protected RectanglePlacement[] placements;
 
   /** Total number of placed rectangles correspondingly. */
   protected int placedRects;
@@ -117,11 +117,7 @@ public class SimpleFit extends Algorithm<Input, Output> {
       itemsTree = new ItemsTree();
     }
     placedRects = 0;
-
-    placement = new ArrayList<Output.Point2D>(rectsCount);
-    for (int i = 0; i < rectsCount; i++) {
-      placement.add(new Output.Point2D());
-    }
+    placements = new RectanglePlacement[rectsCount];
 
     queue = new LinkedList<Segment>();
     queue.addFirst(new Segment(0, stripWidth, 0, ID_NO_RECT));
@@ -168,8 +164,7 @@ public class SimpleFit extends Algorithm<Input, Output> {
           }
 
           // Save coordinates of newly placed rectangle and add it to heap
-          placement.get(rectId).x = rectSegment.xl;
-          placement.get(rectId).y = y0;
+          placements[rectId] = new RectanglePlacement(rectSegment.xl, y0);
           heap.add(rectSegment);
           success = true;
         }
@@ -178,7 +173,9 @@ public class SimpleFit extends Algorithm<Input, Output> {
         if (placementStrategy == PlacementStrategy.SHIFT_RIGHTMOST_ITEM && success &&
             freeSegment.xr > freeSegment.xl && freeSegment.next == null) {
           freeSegment.swapWithPrevious();
-          placement.get(freeSegment.next.rectId).x = freeSegment.next.xl;
+          RectanglePlacement oldPlacement = placements[freeSegment.next.rectId];
+          placements[freeSegment.next.rectId] = new RectanglePlacement(freeSegment.next.xl,
+              oldPlacement.getY());
         }
       } else {
         // Change current y-coordinate to the least y-coordinate of segments in
@@ -203,7 +200,7 @@ public class SimpleFit extends Algorithm<Input, Output> {
       }
     }
 
-    return new Output(input, placement);
+    return new Output(input, Arrays.asList(placements));
   }
 
   /**
