@@ -5,6 +5,7 @@ import java.lang.management.ManagementFactory;
 import com.googlecode.caparf.framework.base.Algorithm;
 import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseItem;
+import com.googlecode.caparf.framework.base.BaseItemPlacement;
 import com.googlecode.caparf.framework.base.BaseOutput;
 import com.googlecode.caparf.framework.base.Verdict;
 import com.googlecode.caparf.framework.runner.RunInformation;
@@ -14,7 +15,8 @@ import com.googlecode.caparf.framework.runner.RunInformation;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class CaparfCore<I extends BaseInput<? extends BaseItem>, O extends BaseOutput> {
+public class CaparfCore<I extends BaseInput<? extends BaseItem>,
+    O extends BaseOutput<? extends BaseItemPlacement>> {
 
   private RunNotifier<I, O> notifier;
 
