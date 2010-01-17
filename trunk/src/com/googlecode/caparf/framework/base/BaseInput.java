@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.googlecode.caparf.framework.runner.Scenario;
+import com.googlecode.caparf.framework.util.CollectionUtil;
+import com.googlecode.caparf.framework.util.ObjectUtil;
 import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
 
 /**
@@ -44,16 +46,16 @@ import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
  * Default implementation of {@link #transform(List)} is simply cloning original
  * input and applying transformation to the list of items after that. It should
  * be sufficient for most (if not all) input classes.
- * 
+ *
  * @param <T> item class
- * 
+ *
  * @author denis.nsc@gmail.com (Denis Nazarov)
- * 
+ *
  * @see com.googlecode.caparf.framework.spp2d.Input
  * @see com.googlecode.caparf.framework.spp2d.Rectangle
  * @see com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator
  */
-public abstract class BaseInput<T extends BaseItem> implements Cloneable {
+public abstract class BaseInput<T extends BaseItem> implements BaseCloneable {
 
   /** Identifier of this input. */
   private final String identifier;
@@ -70,7 +72,7 @@ public abstract class BaseInput<T extends BaseItem> implements Cloneable {
   public BaseInput(List<T> items, String identifier) {
     validateIdentifier(identifier);
     this.identifier = identifier;
-    this.items = deepCopyOf(items);
+    this.items = CollectionUtil.deepCopyOf(items);
   }
 
   /**
@@ -82,7 +84,7 @@ public abstract class BaseInput<T extends BaseItem> implements Cloneable {
   public BaseInput(T[] items, String identifier) {
     validateIdentifier(identifier);
     this.identifier = identifier;
-    this.items = deepCopyOf(items);
+    this.items = CollectionUtil.deepCopyOf(items);
   }
 
   /** Checks that {@code identifier} is valid. */
@@ -130,54 +132,34 @@ public abstract class BaseInput<T extends BaseItem> implements Cloneable {
   }
 
   /**
-   * Transforms input according to {@code transformation}. Resulting input will
-   * have exactly the same number of items as the given {@code transformation}.
-   * {@code i}-th item in transformed input will be equal to {@code
-   * transformation.get(i)}-th item in original input.
+   * Transforms input according to {@code transformation}. Transformed input
+   * will have exactly the same number of items as the given {@code
+   * transformation}. {@code i}-th item in transformed input will be equal to
+   * {@code transformation.get(i)}-th item in original input. It is safe to
+   * down-case transformed input to class of {@code this}.
    *
    * @param transformation items transformation
    * @return transformed input
    */
-  @SuppressWarnings("unchecked")
   public Object transform(List<Integer> transformation) {
-    BaseInput<T> result = (BaseInput<T>) clone();
+    BaseInput<T> result = ObjectUtil.safeClone(this);
     result.items = new ArrayList<T>(transformation.size());
     for (int itemId : transformation) {
-      result.items.add((T) items.get(itemId).clone());
+      result.items.add(ObjectUtil.safeClone(items.get(itemId)));
     }
     return result;
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public Object clone() {
     try {
+      @SuppressWarnings("unchecked")
       BaseInput<T> clone = (BaseInput<T>) super.clone();
-      clone.items = deepCopyOf(items);
+      clone.items = CollectionUtil.deepCopyOf(items);
       return clone;
     } catch (CloneNotSupportedException e) {
       // this shouldn't happen, since we are Cloneable
       throw new InternalError();
     }
-  }
-
-  /** Makes deep copy of the given {@code items}. */
-  @SuppressWarnings("unchecked")
-  public static <T extends BaseItem> List<T> deepCopyOf(List<T> items) {
-    List<T> result = new ArrayList<T>(items.size());
-    for (T item : items) {
-      result.add((T) item.clone());
-    }
-    return result;
-  }
-
-  /** Makes deep copy of the given {@code items}. */
-  @SuppressWarnings("unchecked")
-  public static <T extends BaseItem> List<T> deepCopyOf(T... items) {
-    List<T> result = new ArrayList<T>(items.length);
-    for (T item : items) {
-      result.add((T) item.clone());
-    }
-    return result;
   }
 }

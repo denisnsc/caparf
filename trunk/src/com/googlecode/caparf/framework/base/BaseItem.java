@@ -5,7 +5,7 @@ package com.googlecode.caparf.framework.base;
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class BaseItem implements Cloneable {
+public class BaseItem implements BaseCloneable {
   
   @Override
   public Object clone() {
