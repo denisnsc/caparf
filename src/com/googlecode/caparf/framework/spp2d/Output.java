@@ -48,9 +48,10 @@ public class Output extends BaseOutput<RectanglePlacement> {
   @Override
   public Number calculateObjectiveFunction() {
     int stripHeight = 0;
+    List<Rectangle> rectangles = input.getItems();
     for (int i = 0; i < getPlacementsCount(); i++) {
-      stripHeight = Math.max(stripHeight, getPlacements().get(i).getY() +
-          input.getItems().get(i).getHeight());
+      stripHeight = Math.max(stripHeight, placements.get(i).getY() +
+          rectangles.get(i).getHeight());
     }
     return stripHeight;
   }
@@ -64,7 +65,7 @@ public class Output extends BaseOutput<RectanglePlacement> {
   @Override
   public String toString() {
     String ret = "";
-    for (RectanglePlacement placement : getPlacements()) {
+    for (RectanglePlacement placement : placements) {
       if (ret.length() > 0) {
         ret += ", ";
       }

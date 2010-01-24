@@ -68,7 +68,7 @@ import com.googlecode.caparf.framework.util.ObjectUtil;
 public abstract class BaseOutput<T extends BaseItemPlacement> implements BaseCloneable {
 
   /** List of item placements. */
-  private List<T> placements;
+  protected List<T> placements;
 
   /**
    * Constructs output instance.
