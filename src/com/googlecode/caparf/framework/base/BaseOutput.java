@@ -138,7 +138,7 @@ public abstract class BaseOutput<T extends BaseItemPlacement> implements BaseClo
    * Transforms output according to {@code transformation}. Transformed output
    * will have exactly the same number of item placements as the given {@code
    * transformation}. {@code i}-th item placement in transformed output will be
-   * equal to {@code transformation.get(i)}-th item placement in original
+   * equal to {@code transformation[i]}-th item placement in original
    * output. Use this function to gain extra performance (comparing to
    * {@link #transform(List)}).
    *
