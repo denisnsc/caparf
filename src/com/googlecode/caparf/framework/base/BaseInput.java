@@ -166,6 +166,23 @@ public abstract class BaseInput<T extends BaseItem> implements BaseCloneable {
     items = transformedItems;
   }
 
+  /**
+   * Transforms input according to {@code transformation}. Transformed input
+   * will have exactly the same number of items as the given {@code
+   * transformation}. {@code i}-th item in transformed input will be equal to
+   * {@code transformation[i]}-th item in original input. Use this function to
+   * gain extra performance (comparing to {@link #transform(List)}).
+   *
+   * @param transformation items transformation
+   */
+  public void transform(int[] transformation) {
+    List<T> transformedItems = new ArrayList<T>(transformation.length);
+    for (int i = 0; i < transformation.length; i++) {
+      transformedItems.add(ObjectUtil.safeClone(items.get(transformation[i])));
+    }
+    items = transformedItems;
+  }
+
   @Override
   public Object clone() {
     try {

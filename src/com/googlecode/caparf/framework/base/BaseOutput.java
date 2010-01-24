@@ -134,6 +134,24 @@ public abstract class BaseOutput<T extends BaseItemPlacement> implements BaseClo
     placements = transformedPlacements;
   }
 
+  /**
+   * Transforms output according to {@code transformation}. Transformed output
+   * will have exactly the same number of item placements as the given {@code
+   * transformation}. {@code i}-th item placement in transformed output will be
+   * equal to {@code transformation.get(i)}-th item placement in original
+   * output. Use this function to gain extra performance (comparing to
+   * {@link #transform(List)}).
+   *
+   * @param transformation items transformation
+   */
+  public void transform(int[] transformation) {
+    List<T> transformedPlacements = new ArrayList<T>(transformation.length);
+    for (int i = 0; i < transformation.length; i++) {
+      transformedPlacements.add(ObjectUtil.safeClone(placements.get(transformation[i])));
+    }
+    placements = transformedPlacements;
+  }
+
   @Override
   public Object clone() {
     try {

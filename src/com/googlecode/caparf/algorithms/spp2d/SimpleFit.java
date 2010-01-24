@@ -19,7 +19,6 @@
 
 package com.googlecode.caparf.algorithms.spp2d;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -219,7 +218,7 @@ public class SimpleFit extends Algorithm<Input, Output> {
       }
     }
 
-    return new Output(input, Arrays.asList(placements));
+    return new Output(input, placements);
   }
 
   /**

@@ -44,8 +44,8 @@ public class CollectionUtil {
    */
   public static <T extends BaseCloneable> List<T> deepCopyOf(List<T> items) {
     List<T> result = new ArrayList<T>(items.size());
-    for (T item : items) {
-      result.add(ObjectUtil.safeClone(item));
+    for (int i = 0; i < items.size(); i++) {
+      result.add(ObjectUtil.safeClone(items.get(i)));
     }
     return result;
   }
@@ -59,8 +59,8 @@ public class CollectionUtil {
    */
   public static <T extends BaseCloneable> List<T> deepCopyOf(T... items) {
     List<T> result = new ArrayList<T>(items.length);
-    for (T item : items) {
-      result.add(ObjectUtil.safeClone(item));
+    for (int i = 0; i < items.length; i++) {
+      result.add(ObjectUtil.safeClone(items[i]));
     }
     return result;
   }

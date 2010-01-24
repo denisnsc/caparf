@@ -148,11 +148,11 @@ public class MuLambdaEvolutionary<I extends BaseInput<? extends BaseItem>,
     }
 
     Chromosome best = population.get(0);
-    Integer[] inversedPermutation = new Integer[best.itemsPermutation.size()];
-    for (int i = 0; i < best.itemsPermutation.size(); i++) {
-      inversedPermutation[best.itemsPermutation.get(i)] = i;
+    int[] inversedPermutation = new int[best.itemsPermutation.length];
+    for (int i = 0; i < best.itemsPermutation.length; i++) {
+      inversedPermutation[best.itemsPermutation[i]] = i;
     }
-    best.solution.transform(Arrays.asList(inversedPermutation));
+    best.solution.transform(inversedPermutation);
 
     return best.solution;
   }
@@ -194,13 +194,14 @@ public class MuLambdaEvolutionary<I extends BaseInput<? extends BaseItem>,
    */
   public Chromosome mutate(Chromosome original) {
     Chromosome result = new Chromosome();
-    result.itemsPermutation = new ArrayList<Integer>(original.itemsPermutation);
-    for (int i = 0; i < 2; i++) {
-      int a = rnd.nextInt(result.itemsPermutation.size());
-      int b = rnd.nextInt(result.itemsPermutation.size());
-      Integer tmp = result.itemsPermutation.get(a);
-      result.itemsPermutation.set(a, result.itemsPermutation.get(b));
-      result.itemsPermutation.set(b, tmp);
+    int size = original.itemsPermutation.length;
+    result.itemsPermutation = Arrays.copyOf(original.itemsPermutation, size);
+    for (int i = 2; i > 0; i--) {
+      int a = rnd.nextInt(size);
+      int b = rnd.nextInt(size);
+      int tmp = result.itemsPermutation[a];
+      result.itemsPermutation[a] = result.itemsPermutation[b];
+      result.itemsPermutation[b] = tmp;
     }
     result.decode();
     return result;
@@ -216,18 +217,24 @@ public class MuLambdaEvolutionary<I extends BaseInput<? extends BaseItem>,
    */
   public Chromosome generateRandomChromosome() {
     Chromosome result = new Chromosome();
-    result.itemsPermutation = new ArrayList<Integer>(input.getItemsCount());
-    for (int i = 0; i < input.getItemsCount(); i++) {
-      result.itemsPermutation.add(i);
+    int itemsCount = input.getItemsCount();
+    result.itemsPermutation = new int[itemsCount];
+    for (int i = itemsCount - 1; i >= 0; i--) {
+      result.itemsPermutation[i] = i;
     }
-    Collections.shuffle(result.itemsPermutation, rnd);
+    for (int i = itemsCount; i > 1; i--) {
+      int j = rnd.nextInt(i);
+      int tmp = result.itemsPermutation[i - 1];
+      result.itemsPermutation[i - 1] = result.itemsPermutation[j];
+      result.itemsPermutation[j] = tmp;
+    }
     result.decode();
     return result;
   }
 
   public class Chromosome implements Comparable<Chromosome> {
     /** Permutation of items identifiers. */
-    public List<Integer> itemsPermutation;
+    public int[] itemsPermutation;
     /** Value of objective function for corresponding output. */
     public Number objectiveValue;
     /** Solution (output) produced by external algorithm. */

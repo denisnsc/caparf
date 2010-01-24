@@ -45,6 +45,18 @@ public class Output extends BaseOutput<RectanglePlacement> {
     this.input = input;
   }
 
+  /**
+   * Constructs output for 2 Dimensional Strip Packing Problem. Placements is the
+   * ordered array of bottom-left points of corresponding rectangle items.
+   *
+   * @param input corresponding input for 2 Dimensional Strip Packing Problem
+   * @param placements rectangle item placements
+   */
+  public Output(Input input, RectanglePlacement[] placements) {
+    super(placements);
+    this.input = input;
+  }
+
   @Override
   public Number calculateObjectiveFunction() {
     int stripHeight = 0;
@@ -58,6 +70,12 @@ public class Output extends BaseOutput<RectanglePlacement> {
 
   @Override
   public void transform(List<Integer> transformation) {
+    super.transform(transformation);
+    input.transform(transformation);
+  }
+
+  @Override
+  public void transform(int[] transformation) {
     super.transform(transformation);
     input.transform(transformation);
   }
