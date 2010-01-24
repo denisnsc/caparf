@@ -30,11 +30,11 @@ import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.base.BaseItem;
 import com.googlecode.caparf.framework.base.BaseItemPlacement;
 import com.googlecode.caparf.framework.base.BaseOutput;
+import com.googlecode.caparf.framework.base.InputSuite;
+import com.googlecode.caparf.framework.base.LowerBound;
 import com.googlecode.caparf.framework.base.ObjectiveComparator;
 import com.googlecode.caparf.framework.base.Verdict;
 import com.googlecode.caparf.framework.base.Verdict.Result;
-import com.googlecode.caparf.framework.base.InputSuite;
-import com.googlecode.caparf.framework.base.LowerBound;
 
 /**
  * Listener that collects statistics during algorithm's execution and displays
@@ -88,7 +88,11 @@ public class StatsCollectorListener<I extends BaseInput<? extends BaseItem>,
       if (prefix.isEmpty()) {
         System.out.print("\n" + String.format("%30s%-15s", " ", "LowerBound"));
         for (String id : algorithmNames) {
-          System.out.print(String.format("%-15s", id));
+          String shortId = id;
+          if (shortId.length() > 15) {
+            shortId = shortId.substring(0, 13) + "..";
+          }
+          System.out.print(String.format("%-15s", shortId));
         }
         System.out.print("\n" + String.format("%45s", " "));
         for (int i = 0; i < algorithmNames.size(); i++) {
@@ -98,7 +102,7 @@ public class StatsCollectorListener<I extends BaseInput<? extends BaseItem>,
       }
       System.out.print(String.format("%-30s%-15.2f",
           prefix + node.getName(),
-          node.getLowerBoundSum() / (double) node.getInputsCount()));
+          node.getLowerBoundSum() / node.getInputsCount()));
       for (String id : algorithmNames) {
         System.out.print(String.format("%-8s%-7d",
             String.format("%.2f%%", node.getStats().getGap().get(id) / node.getInputsCount()),
