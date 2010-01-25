@@ -17,7 +17,7 @@
  * along with caparf. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.googlecode.caparf.framework.spp2d;
+package com.googlecode.caparf.framework.items;
 
 import com.googlecode.caparf.framework.base.BaseItem;
 

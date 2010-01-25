@@ -71,7 +71,7 @@ import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
  * @author denis.nsc@gmail.com (Denis Nazarov)
  *
  * @see com.googlecode.caparf.framework.spp2d.Input
- * @see com.googlecode.caparf.framework.spp2d.Rectangle
+ * @see com.googlecode.caparf.framework.items.Rectangle
  * @see com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator
  */
 public abstract class BaseInput<T extends BaseItem> implements BaseCloneable {

@@ -22,12 +22,14 @@ package com.googlecode.caparf.algorithms.spp2d;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import com.googlecode.caparf.framework.base.Algorithm;
+import com.googlecode.caparf.framework.items.Rectangle;
+import com.googlecode.caparf.framework.items.RectanglePlacement;
 import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
-import com.googlecode.caparf.framework.spp2d.RectanglePlacement;
 
 /**
  * SimpleFit can produce the same results as well-known NextFit and FirstFit
@@ -126,9 +128,10 @@ public class SimpleFit extends Algorithm<Input, Output> {
     rectsCount = input.getItemsCount();
     width = new int[rectsCount];
     height = new int[rectsCount];
+    List<Rectangle> rectangles = input.getItems();
     for (int i = 0; i < rectsCount; i++) {
-      width[i] = input.getItems().get(i).getWidth();
-      height[i] = input.getItems().get(i).getHeight();
+      width[i] = rectangles.get(i).getWidth();
+      height[i] = rectangles.get(i).getHeight();
     }
     stripWidth = input.getStripWidth();
     if (itemOrder == ItemOrder.FIRST_FIT) {

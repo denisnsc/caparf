@@ -17,7 +17,7 @@
  * along with caparf. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.googlecode.caparf.framework.spp2d;
+package com.googlecode.caparf.framework.opp2d;
 
 import java.util.List;
 
@@ -25,45 +25,61 @@ import com.googlecode.caparf.framework.base.BaseInput;
 import com.googlecode.caparf.framework.items.Rectangle;
 
 /**
- * Input for 2 Dimensional Strip Packing Problem.
+ * Input for 2 Dimensional Orthogonal Packing Problem.
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
 public class Input extends BaseInput<Rectangle> {
 
-  /** Width of strip. */
-  private final int stripWidth;
+  /** Width of bin. */
+  private final int binWidth;
+
+  /** Height of bin. */
+  private final int binHeight;
 
   /**
-   * Constructs input for 2 Dimensional Strip Packing Problem.
+   * Constructs input for 2 Dimensional Orthogonal Packing Problem.
    *
    * @param rectangles rectangle items to be packed
-   * @param stripWidth width of strip
+   * @param binWidth width of bin
+   * @param binHeight height of bin
    * @param identifier input identifier
    */
-  public Input(List<Rectangle> rectangles, int stripWidth, String identifier) {
+  public Input(List<Rectangle> rectangles, int binWidth, int binHeight, String identifier) {
     super(rectangles, identifier);
-    this.stripWidth = stripWidth;
+    this.binWidth = binWidth;
+    this.binHeight = binHeight;
   }
 
   /**
-   * Constructs input for 2 Dimensional Strip Packing Problem.
+   * Constructs input for 2 Dimensional Orthogonal Packing Problem.
    *
    * @param rectangles rectangle items to be packed
-   * @param stripWidth width of strip
+   * @param binWidth width of bin
+   * @param binHeight height of bin
    * @param identifier input identifier
    */
-  public Input(Rectangle[] rectangles, int stripWidth, String identifier) {
+  public Input(Rectangle[] rectangles, int binWidth, int binHeight, String identifier) {
     super(rectangles, identifier);
-    this.stripWidth = stripWidth;
+    this.binWidth = binWidth;
+    this.binHeight = binHeight;
   }
 
   /**
-   * Returns width of strip into which rectangle items to be packed.
+   * Returns width of bin into which rectangle items to be packed.
    *
-   * @return width of strip
+   * @return width of bin
    */
-  public int getStripWidth() {
-    return stripWidth;
+  public int getBinWidth() {
+    return binWidth;
+  }
+
+  /**
+   * Returns height of bin into which rectangle items to be packed.
+   *
+   * @return height of bin
+   */
+  public int getBinHeight() {
+    return binHeight;
   }
 }

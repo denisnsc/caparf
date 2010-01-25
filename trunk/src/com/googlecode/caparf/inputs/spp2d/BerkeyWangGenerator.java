@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.googlecode.caparf.framework.items.Rectangle;
 import com.googlecode.caparf.framework.spp2d.Input;
-import com.googlecode.caparf.framework.spp2d.Rectangle;
 
 /**
  * Test instances generator proposed by Berkey and Wang. For the reference look

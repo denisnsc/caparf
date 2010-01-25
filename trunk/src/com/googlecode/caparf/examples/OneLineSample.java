@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.caparf.framework.base.Algorithm;
+import com.googlecode.caparf.framework.items.Rectangle;
+import com.googlecode.caparf.framework.items.RectanglePlacement;
 import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
-import com.googlecode.caparf.framework.spp2d.Rectangle;
-import com.googlecode.caparf.framework.spp2d.RectanglePlacement;
 
 public class OneLineSample extends Algorithm<Input, Output> {
   @Override

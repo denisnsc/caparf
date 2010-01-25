@@ -20,8 +20,8 @@
 package com.googlecode.caparf.algorithms.spp2d.lowerbounds;
 
 import com.googlecode.caparf.framework.base.LowerBound;
+import com.googlecode.caparf.framework.items.Rectangle;
 import com.googlecode.caparf.framework.spp2d.Input;
-import com.googlecode.caparf.framework.spp2d.Rectangle;
 
 /**
  * Naive lower bound is simply the total area of rectangle items divided by
