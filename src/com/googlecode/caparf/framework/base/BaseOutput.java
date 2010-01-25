@@ -63,7 +63,7 @@ import com.googlecode.caparf.framework.util.ObjectUtil;
  * @author denis.nsc@gmail.com (Denis Nazarov)
  *
  * @see com.googlecode.caparf.framework.spp2d.Output
- * @see com.googlecode.caparf.framework.spp2d.RectanglePlacement
+ * @see com.googlecode.caparf.framework.items.RectanglePlacement
  */
 public abstract class BaseOutput<T extends BaseItemPlacement> implements BaseCloneable {
 

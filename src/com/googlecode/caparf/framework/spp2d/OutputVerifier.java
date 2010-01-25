@@ -24,6 +24,8 @@ import java.util.List;
 import com.googlecode.caparf.framework.base.BaseOutputVerifier;
 import com.googlecode.caparf.framework.base.Verdict;
 import com.googlecode.caparf.framework.base.Verdict.Result;
+import com.googlecode.caparf.framework.items.Rectangle;
+import com.googlecode.caparf.framework.items.RectanglePlacement;
 
 /**
  * Verifier of output for 2 Dimensional Strip Packing Problem.

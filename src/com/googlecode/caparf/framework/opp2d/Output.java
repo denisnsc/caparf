@@ -17,68 +17,78 @@
  * along with caparf. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.googlecode.caparf.framework.spp2d;
+package com.googlecode.caparf.framework.opp2d;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.caparf.framework.base.BaseOutput;
-import com.googlecode.caparf.framework.items.Rectangle;
 import com.googlecode.caparf.framework.items.RectanglePlacement;
 
 /**
- * Output for 2 Dimensional Strip Packing Problem.
+ * Output for 2 Dimensional Orthogonal Packing Problem.
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
 public class Output extends BaseOutput<RectanglePlacement> {
 
-  /** Corresponding input. */
-  private Input input;
+  /** Indicates whether the needed placement was found or not. */
+  private final boolean hasSolution;
 
   /**
-   * Constructs output for 2 Dimensional Strip Packing Problem. Placements is the
-   * ordered list of bottom-left points of corresponding rectangle items.
+   * Constructs output for 2 Dimensional Orthogonal Packing Problem. Placements
+   * is the ordered list of bottom-left points of corresponding rectangle items.
    *
-   * @param input corresponding input for 2 Dimensional Strip Packing Problem
    * @param placements rectangle item placements
    */
-  public Output(Input input, List<RectanglePlacement> placements) {
+  public Output(List<RectanglePlacement> placements) {
     super(placements);
-    this.input = input;
+    this.hasSolution = true;
   }
 
   /**
-   * Constructs output for 2 Dimensional Strip Packing Problem. Placements is the
-   * ordered array of bottom-left points of corresponding rectangle items.
+   * Constructs output for 2 Dimensional Orthogonal Packing Problem. Placements
+   * is the ordered list of bottom-left points of corresponding rectangle items.
    *
-   * @param input corresponding input for 2 Dimensional Strip Packing Problem
    * @param placements rectangle item placements
    */
-  public Output(Input input, RectanglePlacement[] placements) {
+  public Output(RectanglePlacement[] placements) {
     super(placements);
-    this.input = input;
+    this.hasSolution = true;
+  }
+
+  /**
+   * Constructs output for 2 Dimensional Orthogonal Packing Problem that has no
+   * placements, i.e. the corresponding input is infeasible.
+   */
+  public Output() {
+    super(new ArrayList<RectanglePlacement>());
+    this.hasSolution = true;
+  }
+
+  /**
+   * @return whether the needed placement was found or not
+   */
+  public boolean hasSolution() {
+    return hasSolution;
   }
 
   @Override
   public Number calculateObjectiveFunction() {
-    int stripHeight = 0;
-    List<Rectangle> rectangles = input.getItems();
-    for (int i = 0; i < getPlacementsCount(); i++) {
-      stripHeight = Math.max(stripHeight, placements.get(i).getY() +
-          rectangles.get(i).getHeight());
-    }
-    return stripHeight;
+    return hasSolution ? 1 : 0;
   }
 
   @Override
   public void transform(List<Integer> transformation) {
-    super.transform(transformation);
-    input.transform(transformation);
+    if (hasSolution) {
+      super.transform(transformation);
+    }
   }
 
   @Override
   public void transform(int[] transformation) {
-    super.transform(transformation);
-    input.transform(transformation);
+    if (hasSolution) {
+      super.transform(transformation);
+    }
   }
 }
