@@ -66,7 +66,7 @@ public class OutputVerifier implements BaseOutputVerifier<Input, Output> {
         if (placement.getX() < 0 || placement.getX() + rect.getWidth() > input.getBinWidth() ||
             placement.getY() < 0 || placement.getY() + rect.getHeight() > input.getBinHeight()) {
           verdict.setResult(Result.INVALID_OUTPUT);
-          verdict.setComment("Rectangle item #" + i + " does not fit into the strip");
+          verdict.setComment("Rectangle item #" + i + " does not fit into the bin");
           return verdict;
         }
       }

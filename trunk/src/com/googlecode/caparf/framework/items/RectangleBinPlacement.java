@@ -22,26 +22,31 @@ package com.googlecode.caparf.framework.items;
 import com.googlecode.caparf.framework.base.BaseItemPlacement;
 
 /**
- * Rectangle item placement which is defined by its lower-left point.
+ * Rectangle item bin-placement which is defined by its lower-left point and bin
+ * number (<code>0</code>-based).
  *
  * @author denis.nsc@gmail.com (Denis Nazarov)
  */
-public class RectanglePlacement extends BaseItemPlacement {
+public class RectangleBinPlacement extends BaseItemPlacement {
   /** {@code x}-coordinate of rectangle lower-left point. */
   private int x;
   /** {@code y}-coordinate of rectangle lower-left point. */
   private int y;
+  /** Number of bin into which rectangle is packed. */
+  private int binNumber;
 
   /**
-   * Constructs {@code RectanglePlacement} by the given coordinates of its
-   * lower-left point.
+   * Constructs {@code RectangleBinPlacement} by the given coordinates of its
+   * lower-left point and bin number.
    *
    * @param x {@code x}-coordinate of rectangle lower-left point
    * @param y {@code y}-coordinate of rectangle lower-left point
+   * @param binNumber number of bin into which rectangle is packed
    */
-  public RectanglePlacement(int x, int y) {
+  public RectangleBinPlacement(int x, int y, int binNumber) {
     this.x = x;
     this.y = y;
+    this.binNumber = binNumber;
   }
 
   /**
@@ -56,5 +61,12 @@ public class RectanglePlacement extends BaseItemPlacement {
    */
   public int getY() {
     return y;
+  }
+
+  /**
+   * @return number of bin into which rectangle is packed
+   */
+  public int getBinNumber() {
+    return binNumber;
   }
 }
