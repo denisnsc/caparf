@@ -26,7 +26,7 @@ import java.util.List;
 import com.googlecode.caparf.framework.runner.Scenario;
 import com.googlecode.caparf.framework.util.CollectionUtil;
 import com.googlecode.caparf.framework.util.ObjectUtil;
-import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
+import com.googlecode.caparf.inputs.bpp2d.BerkeyWangGenerator;
 
 /**
  * Base class for cutting-and-packing algorithm's input. Key inputs properties
@@ -72,7 +72,7 @@ import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
  *
  * @see com.googlecode.caparf.framework.spp2d.Input
  * @see com.googlecode.caparf.framework.items.Rectangle
- * @see com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator
+ * @see com.googlecode.caparf.inputs.bpp2d.BerkeyWangGenerator
  */
 public abstract class BaseInput<T extends BaseItem> implements BaseCloneable {
 
