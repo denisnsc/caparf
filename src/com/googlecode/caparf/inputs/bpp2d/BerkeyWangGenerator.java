@@ -17,7 +17,7 @@
  * along with caparf. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.googlecode.caparf.inputs.spp2d;
+package com.googlecode.caparf.inputs.bpp2d;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.googlecode.caparf.framework.bpp2d.Input;
 import com.googlecode.caparf.framework.items.Rectangle;
-import com.googlecode.caparf.framework.spp2d.Input;
 
 /**
  * Test instances generator proposed by Berkey and Wang. For the reference look
@@ -41,29 +41,31 @@ import com.googlecode.caparf.framework.spp2d.Input;
  */
 public class BerkeyWangGenerator {
 
-  public static final String INPUT_IDENTIFIER_PREFIX = "spp2d.Berkey and Wang.";
+  public static final String INPUT_IDENTIFIER_PREFIX = "bpp2d.Berkey and Wang.";
 
   public enum Type {
-    CLASS_I   (1, 10,  1, 10,  10 ),
-    CLASS_II  (1, 10,  1, 10,  30 ),
-    CLASS_III (1, 35,  1, 35,  40 ),
-    CLASS_IV  (1, 35,  1, 35,  100),
-    CLASS_V   (1, 100, 1, 100, 100),
-    CLASS_VI  (1, 100, 1, 100, 300);
+    CLASS_I   (1, 10,  1, 10,  10,  10),
+    CLASS_II  (1, 10,  1, 10,  30,  30),
+    CLASS_III (1, 35,  1, 35,  40,  40),
+    CLASS_IV  (1, 35,  1, 35,  100, 100),
+    CLASS_V   (1, 100, 1, 100, 100, 100),
+    CLASS_VI  (1, 100, 1, 100, 300, 300);
 
-    // Items' height is uniformly random in [minHeight .. maxHeight]
-    int minHeight, maxHeight;
     // Items' width is uniformly random in [minWidth .. maxWidth]
     int minWidth, maxWidth;
-    // Strip width
-    int stripWidth;
+    // Items' height is uniformly random in [minHeight .. maxHeight]
+    int minHeight, maxHeight;
+    // Bin's width and height
+    int binWidth, binHeight;
 
-    private Type(int minHeight, int maxHeight, int minWidth, int maxWidth, int width) {
-      this.minHeight = minHeight;
-      this.maxHeight = maxHeight;
+    private Type(int minWidth, int maxWidth, int minHeight, int maxHeight, int binWidth,
+        int binHeight) {
       this.minWidth = minWidth;
       this.maxWidth = maxWidth;
-      this.stripWidth = width;
+      this.minHeight = minHeight;
+      this.maxHeight = maxHeight;
+      this.binWidth = binWidth;
+      this.binHeight = binHeight;
     }
   }
 
@@ -78,26 +80,26 @@ public class BerkeyWangGenerator {
   }
 
   public List<Input> generateInstances(int count, int itemsCount, Type type) {
-    return generateInstances(count, itemsCount, type.minHeight, type.maxHeight, type.minWidth,
-        type.maxWidth, type.stripWidth);
+    return generateInstances(count, itemsCount, type.minWidth, type.maxWidth, type.minHeight,
+        type.maxHeight, type.binWidth, type.binHeight);
   }
 
   public Input generateInstance(int itemsCount, Type type) {
-    return generateInstance(itemsCount, type.minHeight, type.maxHeight, type.minWidth,
-        type.maxWidth, type.stripWidth);
+    return generateInstance(itemsCount, type.minWidth, type.maxWidth, type.minHeight,
+        type.maxHeight, type.binWidth, type.binHeight);
   }
 
-  public List<Input> generateInstances(int count, int itemsCount, int minHeight, int maxHeight,
-      int minWidth, int maxWidth, int width) {
+  public List<Input> generateInstances(int count, int itemsCount, int minWidth, int maxWidth,
+      int minHeight, int maxHeight, int binWidth, int binHeight) {
     ArrayList<Input> instances = new ArrayList<Input>(count);
     for (int i = 0; i < count; i++) {
-      instances.add(generateInstance(itemsCount, minHeight, maxHeight, minWidth, maxWidth, width));
+      instances.add(generateInstance(itemsCount, minWidth, maxWidth, minHeight, maxHeight,
+          binWidth, binHeight));
     }
     return instances;
   }
 
-  public Input generateInstance(int itemsCount, int minHeight, int maxHeight, int minWidth,
-      int maxWidth, int width) {
+  public Input generateInstance(int itemsCount, int minWidth, int maxWidth, int minHeight, int maxHeight, int binWidth, int binHeight) {
     long seed = System.currentTimeMillis();
     random.setSeed(seed);
     ArrayList<Rectangle> items = new ArrayList<Rectangle>(itemsCount);
@@ -105,7 +107,7 @@ public class BerkeyWangGenerator {
       items.add(new Rectangle(random.nextInt(maxWidth - minWidth + 1) + minWidth,
           random.nextInt(maxHeight - minHeight + 1) + minHeight));
     }
-    return new Input(items, width, INPUT_IDENTIFIER_PREFIX + "random." + seed);
+    return new Input(items, binWidth, binHeight, INPUT_IDENTIFIER_PREFIX + "random." + seed);
   }
 
   public static List<Input> getReferenceInstances(Type type) {
@@ -125,13 +127,13 @@ public class BerkeyWangGenerator {
     for (Type type : Type.values()) {
       ArrayList<Input> instances = new ArrayList<Input>(INSTANCES_PER_TYPE);
       for (int id = 0; id < INSTANCES_PER_TYPE; id++) {
-        int stripWidth = scanner.nextInt();
+        int width = scanner.nextInt();
         int itemsCount = scanner.nextInt();
         Rectangle items[] = new Rectangle[itemsCount];
         for (int i = 0; i < itemsCount; i++) {
           items[i] = new Rectangle(scanner.nextInt(), scanner.nextInt());
         }
-        Input instance = new Input(items, stripWidth, INPUT_IDENTIFIER_PREFIX + "Class " +
+        Input instance = new Input(items, width, width, INPUT_IDENTIFIER_PREFIX + "Class " +
             (type.ordinal() + 1) + "." + String.format("%02d", id + 1));
         instances.add(instance);
       }

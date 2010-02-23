@@ -30,8 +30,9 @@ import com.googlecode.caparf.framework.runner.StatsCollectorListener;
 import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
 import com.googlecode.caparf.framework.spp2d.OutputVerifier;
-import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator;
-import com.googlecode.caparf.inputs.spp2d.BerkeyWangGenerator.Type;
+import com.googlecode.caparf.inputs.bpp2d.BerkeyWangGenerator;
+import com.googlecode.caparf.inputs.bpp2d.BerkeyWangGenerator.Type;
+import com.googlecode.caparf.inputs.spp2d.Converter;
 
 public class SimpleFitTestScenario {
 
@@ -49,12 +50,12 @@ public class SimpleFitTestScenario {
 
     // Create suite of Berkey and Wang inputs and add it to scenario
     InputSuite<Input> berkeyWangSuite = new InputSuite<Input>()
-        .addAll(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_I))
-        .addAll(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_II))
-        .addAll(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_III))
-        .addAll(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_IV))
-        .addAll(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_V))
-        .addAll(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_VI));
+        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_I)))
+        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_II)))
+        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_III)))
+        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_IV)))
+        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_V)))
+        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_VI)));
     scenario.addInputSuite(berkeyWangSuite);
 
     // Set output verifier for scenario

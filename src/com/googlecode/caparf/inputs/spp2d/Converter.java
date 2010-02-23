@@ -37,7 +37,7 @@ public class Converter {
    * @return 2 Dimensional Strip Packing Problem input corresponding to the
    *         given 2 Dimensional Orthogonal Packing Problem input
    */
-  public static com.googlecode.caparf.framework.spp2d.Input convert(
+  public static com.googlecode.caparf.framework.spp2d.Input convertOpp2d(
       com.googlecode.caparf.framework.opp2d.Input opp2dInput) {
     return new com.googlecode.caparf.framework.spp2d.Input(opp2dInput.getItems(),
         opp2dInput.getBinWidth(), opp2dInput.getIdentifier().replaceFirst("opp2d", "spp2d"));
@@ -47,16 +47,48 @@ public class Converter {
    * Converts 2 Dimensional Orthogonal Packing Problem inputs to 2 Dimensional
    * Strip Packing Problem inputs.
    *
-   * @param opp2dInput list of 2 Dimensional Orthogonal Packing Problem inputs
+   * @param opp2dInputs list of 2 Dimensional Orthogonal Packing Problem inputs
    * @return list of 2 Dimensional Strip Packing Problem inputs corresponding to
    *         the given list of 2 Dimensional Orthogonal Packing Problem inputs
    */
-  public static List<com.googlecode.caparf.framework.spp2d.Input> convert(
+  public static List<com.googlecode.caparf.framework.spp2d.Input> convertOpp2d(
       List<com.googlecode.caparf.framework.opp2d.Input> opp2dInputs) {
     ArrayList<com.googlecode.caparf.framework.spp2d.Input> result =
         new ArrayList<com.googlecode.caparf.framework.spp2d.Input>(opp2dInputs.size());
     for (com.googlecode.caparf.framework.opp2d.Input input : opp2dInputs) {
-      result.add(convert(input));
+      result.add(convertOpp2d(input));
+    }
+    return result;
+  }
+
+  /**
+   * Converts 2 Dimensional Bin Packing Problem input to 2 Dimensional Strip
+   * Packing Problem input.
+   *
+   * @param bpp2dInput 2 Dimensional Bin Packing Problem input
+   * @return 2 Dimensional Strip Packing Problem input corresponding to the
+   *         given 2 Dimensional Bin Packing Problem input
+   */
+  public static com.googlecode.caparf.framework.spp2d.Input convertBpp2d(
+      com.googlecode.caparf.framework.bpp2d.Input bpp2dInput) {
+    return new com.googlecode.caparf.framework.spp2d.Input(bpp2dInput.getItems(),
+        bpp2dInput.getBinWidth(), bpp2dInput.getIdentifier().replaceFirst("bpp2d", "spp2d"));
+  }
+
+  /**
+   * Converts 2 Dimensional Bin Packing Problem inputs to 2 Dimensional Strip
+   * Packing Problem inputs.
+   *
+   * @param bpp2dInputs list of 2 Dimensional Bin Packing Problem inputs
+   * @return list of 2 Dimensional Strip Packing Problem inputs corresponding to
+   *         the given list of 2 Dimensional Bin Packing Problem inputs
+   */
+  public static List<com.googlecode.caparf.framework.spp2d.Input> convertBpp2d(
+      List<com.googlecode.caparf.framework.bpp2d.Input> bpp2dInputs) {
+    ArrayList<com.googlecode.caparf.framework.spp2d.Input> result =
+        new ArrayList<com.googlecode.caparf.framework.spp2d.Input>(bpp2dInputs.size());
+    for (com.googlecode.caparf.framework.bpp2d.Input input : bpp2dInputs) {
+      result.add(convertBpp2d(input));
     }
     return result;
   }
