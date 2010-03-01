@@ -20,6 +20,7 @@
 package com.googlecode.caparf.inputs.bpp2d;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,22 +44,34 @@ public class BerkeyWangGenerator {
 
   public static final String INPUT_IDENTIFIER_PREFIX = "bpp2d.Berkey and Wang.";
 
-  public enum Type {
-    CLASS_I   (1, 10,  1, 10,  10,  10),
-    CLASS_II  (1, 10,  1, 10,  30,  30),
-    CLASS_III (1, 35,  1, 35,  40,  40),
-    CLASS_IV  (1, 35,  1, 35,  100, 100),
-    CLASS_V   (1, 100, 1, 100, 100, 100),
-    CLASS_VI  (1, 100, 1, 100, 300, 300);
+  public static final Type CLASS_I   = new Type(1, 10,  1, 10,  10,  10);
+  public static final Type CLASS_II  = new Type(1, 10,  1, 10,  30,  30);
+  public static final Type CLASS_III = new Type(1, 35,  1, 35,  40,  40);
+  public static final Type CLASS_IV  = new Type(1, 35,  1, 35,  100, 100);
+  public static final Type CLASS_V   = new Type(1, 100, 1, 100, 100, 100);
+  public static final Type CLASS_VI  = new Type(1, 100, 1, 100, 300, 300);
 
+  /**
+   * Instance type described by items width and height distribution, width and
+   * height of the bin.
+   */
+  public static class Type {
     // Items' width is uniformly random in [minWidth .. maxWidth]
-    int minWidth, maxWidth;
+    protected int minWidth, maxWidth;
     // Items' height is uniformly random in [minHeight .. maxHeight]
-    int minHeight, maxHeight;
+    protected int minHeight, maxHeight;
     // Bin's width and height
-    int binWidth, binHeight;
+    protected int binWidth, binHeight;
 
-    private Type(int minWidth, int maxWidth, int minHeight, int maxHeight, int binWidth,
+    /**
+     * Creates instance of {@code Type} by the given parameters. Widths of
+     * generated items for this type will be uniformly distributed in
+     * <code>[minWidth .. maxWidth]</code> and height will be respectively in
+     * <code>[minHeight .. maxHeight]</code>. Width and height of the bin will
+     * be equal to <code>binWidth</code> and <code>binHeight</code>
+     * correspondingly.
+     */
+    public Type(int minWidth, int maxWidth, int minHeight, int maxHeight, int binWidth,
         int binHeight) {
       this.minWidth = minWidth;
       this.maxWidth = maxWidth;
@@ -69,49 +82,102 @@ public class BerkeyWangGenerator {
     }
   }
 
+  /** Random generator that will be used in inputs generation. */
   private Random random;
+  /** Random generator that will be used to generate seeds. */
+  private Random seedGenerator;
 
   public BerkeyWangGenerator() {
     random = new Random();
+    seedGenerator = new Random();
   }
 
-  public BerkeyWangGenerator(long seed) {
-    random = new Random(seed);
-  }
-
+  /**
+   * Generates {@code code} inputs with {@code itemsCount} items of {@code type}
+   * type.
+   *
+   * @param count number of inputs to generate
+   * @param itemsCount number of items to generate (per one input)
+   * @param type type of items to generate
+   * @return {@code code} inputs with {@code itemsCount} items of {@code type}
+   *         type
+   */
   public List<Input> generateInstances(int count, int itemsCount, Type type) {
-    return generateInstances(count, itemsCount, type.minWidth, type.maxWidth, type.minHeight,
-        type.maxHeight, type.binWidth, type.binHeight);
+    return generateInstances(count, itemsCount, type, seedGenerator.nextLong());
   }
 
-  public Input generateInstance(int itemsCount, Type type) {
-    return generateInstance(itemsCount, type.minWidth, type.maxWidth, type.minHeight,
-        type.maxHeight, type.binWidth, type.binHeight);
-  }
-
-  public List<Input> generateInstances(int count, int itemsCount, int minWidth, int maxWidth,
-      int minHeight, int maxHeight, int binWidth, int binHeight) {
+  /**
+   * Generates {@code code} inputs with {@code itemsCount} items of {@code type}
+   * type. List of inputs generated with the same {@code seed} by this method
+   * will be identical.
+   *
+   * @param count number of inputs to generate
+   * @param itemsCount number of items to generate (per one input)
+   * @param type type of items to generate
+   * @param seed the initial seed
+   * @return {@code code} inputs with {@code itemsCount} items of {@code type}
+   *         type
+   */
+  public List<Input> generateInstances(int count, int itemsCount, Type type, long seed) {
+    seedGenerator.setSeed(seed);
     ArrayList<Input> instances = new ArrayList<Input>(count);
     for (int i = 0; i < count; i++) {
-      instances.add(generateInstance(itemsCount, minWidth, maxWidth, minHeight, maxHeight,
-          binWidth, binHeight));
+      instances.add(generateInstance(itemsCount, type, seedGenerator.nextLong()));
     }
     return instances;
   }
 
-  public Input generateInstance(int itemsCount, int minWidth, int maxWidth, int minHeight, int maxHeight, int binWidth, int binHeight) {
-    long seed = System.currentTimeMillis();
+  /**
+   * Generates single input with {@code itemsCount} items of {@code type} type.
+   *
+   * @param itemsCount number of items to generate (per one input)
+   * @param type type of items to generate
+   * @return {@code code} inputs with {@code itemsCount} items of {@code type}
+   *         type
+   */
+  public Input generateInstance(int itemsCount, Type type) {
+    return generateInstance(itemsCount, type, seedGenerator.nextLong());
+  }
+
+  /**
+   * Generates single input with {@code itemsCount} items of {@code type} type.
+   * Inputs generated with the same {@code seed} by this method will be
+   * identical.
+   *
+   * @param itemsCount number of items to generate (per one input)
+   * @param type type of items to generate
+   * @param seed the initial seed
+   * @return {@code code} inputs with {@code itemsCount} items of {@code type}
+   *         type
+   */
+  public Input generateInstance(int itemsCount, Type type, long seed) {
     random.setSeed(seed);
     ArrayList<Rectangle> items = new ArrayList<Rectangle>(itemsCount);
     for (int i = 0; i < itemsCount; i++) {
-      items.add(new Rectangle(random.nextInt(maxWidth - minWidth + 1) + minWidth,
-          random.nextInt(maxHeight - minHeight + 1) + minHeight));
+      items.add(new Rectangle(random.nextInt(type.maxWidth - type.minWidth + 1) + type.minWidth,
+          random.nextInt(type.maxHeight - type.minHeight + 1) +
+          type.minHeight));
     }
-    return new Input(items, binWidth, binHeight, INPUT_IDENTIFIER_PREFIX + "random." + seed);
+    return new Input(items, type.binWidth, type.binHeight, INPUT_IDENTIFIER_PREFIX + "random." +
+        seed);
   }
 
+  /**
+   * @return reference instances corresponding to the given {@code type}
+   */
   public static List<Input> getReferenceInstances(Type type) {
     return REFERENCE_INSTANCES.get(type);
+  }
+
+  /**
+   * @return all reference instances
+   */
+  public static List<Input> getReferenceInstances() {
+    ArrayList<Input> result = new ArrayList<Input>();
+    for (List<Input> instances : REFERENCE_INSTANCES.values()) {
+      result.addAll(instances);
+    }
+    return result;
   }
 
   private static final Map<Type, List<Input>> REFERENCE_INSTANCES;
@@ -124,7 +190,10 @@ public class BerkeyWangGenerator {
     REFERENCE_INSTANCES = new HashMap<Type, List<Input>>();
     Scanner scanner = new Scanner(BerkeyWangGenerator.class.getResourceAsStream(
         REFERENCE_INSTANCES_RESOURCE_NAME));
-    for (Type type : Type.values()) {
+    List<Type> allTypes = new ArrayList<Type>();
+    Collections.addAll(allTypes, CLASS_I, CLASS_II, CLASS_III, CLASS_IV, CLASS_V, CLASS_VI);
+    for (int j = 0; j < allTypes.size(); j++) {
+      Type type = allTypes.get(j);
       ArrayList<Input> instances = new ArrayList<Input>(INSTANCES_PER_TYPE);
       for (int id = 0; id < INSTANCES_PER_TYPE; id++) {
         int width = scanner.nextInt();
@@ -134,7 +203,7 @@ public class BerkeyWangGenerator {
           items[i] = new Rectangle(scanner.nextInt(), scanner.nextInt());
         }
         Input instance = new Input(items, width, width, INPUT_IDENTIFIER_PREFIX + "Class " +
-            (type.ordinal() + 1) + "." + String.format("%02d", id + 1));
+            (j + 1) + "." + String.format("%02d", id + 1));
         instances.add(instance);
       }
       REFERENCE_INSTANCES.put(type, instances);
