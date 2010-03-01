@@ -31,7 +31,7 @@ import com.googlecode.caparf.framework.spp2d.Input;
 import com.googlecode.caparf.framework.spp2d.Output;
 import com.googlecode.caparf.framework.spp2d.OutputVerifier;
 import com.googlecode.caparf.inputs.bpp2d.BerkeyWangGenerator;
-import com.googlecode.caparf.inputs.bpp2d.BerkeyWangGenerator.Type;
+import com.googlecode.caparf.inputs.bpp2d.MartelloVigoGenerator;
 import com.googlecode.caparf.inputs.spp2d.Converter;
 
 public class SimpleFitTestScenario {
@@ -48,14 +48,11 @@ public class SimpleFitTestScenario {
         new SimpleFit(ItemOrder.FIRST_FIT, PlacementStrategy.DEFAULT),
         new SimpleFit(ItemOrder.FIRST_FIT, PlacementStrategy.SHIFT_RIGHTMOST_ITEM));
 
-    // Create suite of Berkey and Wang inputs and add it to scenario
+    // Create suite of Bortfeld set (Berkey-Wang and Martello-Vigo inputs)
+    // and add it to scenario
     InputSuite<Input> berkeyWangSuite = new InputSuite<Input>()
-        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_I)))
-        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_II)))
-        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_III)))
-        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_IV)))
-        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_V)))
-        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances(Type.CLASS_VI)));
+        .addAll(Converter.convertBpp2d(BerkeyWangGenerator.getReferenceInstances()))
+        .addAll(Converter.convertBpp2d(MartelloVigoGenerator.getReferenceInstances()));
     scenario.addInputSuite(berkeyWangSuite);
 
     // Set output verifier for scenario
