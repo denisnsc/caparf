@@ -1,0 +1,161 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Copyright (C) 2010 Denis Nazarov <denis.nsc@gmail.com>.
+%%
+%% This file is part of caparf (http://code.google.com/p/caparf/).
+%%
+%% caparf is free software: you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published by
+%% the Free Software Foundation, either version 3 of the License, or
+%% (at your option) any later version.
+%%
+%% caparf is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+%% GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public License
+%% along with caparf. If not, see <http://www.gnu.org/licenses/>.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[unicode]{beamer}
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[cp1251]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{color}
+\usetheme{Darmstadt}
+\setbeamertemplate{footline}[page number]
+\setbeamertemplate{navigation symbols}{} 
+
+\title[Cutting And Packing Algorithms Research Framework]{
+Cutting And Packing Algorithms\\
+Research Framework\\
+http://caparf.googlecode.com}
+\author{Denis Nazarov}
+\institute{Ufa State Technical University of Aviation}
+\date{12 July 2010}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Motivation}
+\subsection{}
+
+\begin{frame}{Algorithm development challenges/issues}
+\Large
+\begin{itemize}
+	\item Algorithm details are often omitted in articles \bigskip
+  \item It's hard to get/generate test instances proposed by other authors \bigskip
+  \item Different system configurations for testing \bigskip
+  \item Small number of review articles with algorithms comparisons \bigskip
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Desired solution}
+\begin{block}{Consists of}
+\begin{itemize}
+	\item Algorithms (i.e. lower bounds/upper bounds/exact methods) for solving particular type(s) of problems
+	\item Test data generators
+\end{itemize}
+\end{block}
+\begin{block}{Provides}
+\begin{itemize}
+  \item Convenient «testing scenario» model
+	\item Various reports generators (for example, results for article in TeX or presentation)
+	\item Easy way to develop your own algorithms using existing methods and compare them with well-known reference algorithms by other authors
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Implementation}
+\subsection{}
+
+\begin{frame}{Cutting and Packing Algorithms Research Framework}
+\Large
+\begin{enumerate}
+	\item CAPARF is an OpenSource project\\ {\normalsize \itshape hosted at  \textcolor{blue}{http://code.google.com }under GPLv3 licence}
+	\item CAPARF is a cross-platform framework\\ {\normalsize \itshape it is implemented in Java}
+	\item CAPARF forces unification\\ {\normalsize \itshape all algorithms for the same type of problem implement the same interface}
+	\item CAPARF potentially can contain a lot of algorithms and test
+data/generators
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Problem type concept}
+Problem type is defined by {\ttfamily Input} and {\ttfamily Output}.
+\begin{block}{{\ttfamily Input} is represented by}
+\begin{itemize}
+  \item ordered list of items to pack
+  \item and, possibly, ordered list of containers into which items are packed
+\end{itemize}
+\end{block}
+\begin{block}{{\ttfamily Output} is represented by}
+\begin{itemize}
+  \item ordered list of item placements
+  \item objective function
+\end{itemize}
+\end{block}
+{\ttfamily OutputVerifier} is implemented for each problem type, i.e. {\ttfamily Input} and {\ttfamily Output}.
+\end{frame}
+
+\begin{frame}{Algorithm concept}
+Algorithm can be defined for particular problem type or for some class of problem types. \\\medskip
+\begin{block}{Algorithm types}
+\begin{enumerate}
+	\item Lower bounds
+	\item Upper bounds
+	\item Exact methods
+\end{enumerate}
+\end{block} \medskip
+Interruption of algorithm computations can be safely done by implementing {\ttfamily Interruptible} interface.
+\end{frame}
+
+\begin{frame}{Test data generator and scenario concepts}
+Test data generator provides reference and random {\ttfamily Input}s.\\
+Scenario is defined for particular problem type.
+\begin{block}{Scenario components}
+\begin{itemize}
+	\item Algorithms of the same type to run
+	\item Test data on which algorithms should be run
+	\item Technical constraints (like time limit)
+\end{itemize}
+\end{block}
+Report generator(s) can be added to produce statistics/results in preferable format.
+\end{frame}
+
+\section{Contribution}
+\subsection{}
+
+\begin{frame}{Contribution}
+CAPARF can be successful and useful only as a community project.\\
+\begin{block}{Possible types of contribution}
+\begin{enumerate}
+	\item Ideas, suggestions, criticism
+	\item Feature requests, bug reports
+	\item Code changes, including but not limited to: 
+\begin{enumerate}
+	\item Adding your algorithms, test generators
+	\item Changing CAPARF core, adding more functionality
+\end{enumerate}	
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}{Contacts}
+\Large For more information visit\medskip
+\huge
+\begin{center}
+\textcolor{blue}{http://caparf.googlecode.com}\\
+\end{center}
+
+\bigskip\bigskip
+
+\Large or mail to\medskip
+\huge
+\begin{center}
+\textcolor{blue}{caparf-discuss@googlegroups.com}
+\end{center}
+\end{frame}
+
+\end{document}
